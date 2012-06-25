@@ -25,7 +25,7 @@ function! s:get_data_list(path)
 endfunction
 
 
-function! unite#libs#svn#log#new()
+function! unite#libs#vcs#svn#log#new()
     let l:obj   = {}
 
     function l:obj.initialize(args)

@@ -29,7 +29,7 @@ function! s:define_sources()
             let buffer = bufnr( '%' )
 
             " call VCSCommand function to check vcs type
-            let vcsType = VCSCommandGetVCSType( buffer )
+            let vcsType = tolower(VCSCommandGetVCSType( buffer ))
 
             " create object for unite sorce by vcsType and command 
             let l:obj   = unite#libs#vcs#{vcsType}#{self.vcs_command}#new()
@@ -54,7 +54,7 @@ function! unite#sources#vcs#define()
     return s:define_sources()
 endfunction
 
-"call unite#libs#svn#extension#kind#define()
+call unite#libs#vcs#kind#define()
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
