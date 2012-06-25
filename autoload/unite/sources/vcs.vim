@@ -1,6 +1,6 @@
 "==========================================================================
 " FILE:     vcs.vim
-" AUTHOR:   umezo <umezo+vim@gmail.com>
+" AUTHOR:   umezo <umezo100+vim@gmail.com>
 " Version: 0.1.0
 "==========================================================================
 
@@ -30,12 +30,9 @@ function! s:define_sources()
 
             " call VCSCommand function to check vcs type
             let vcsType = VCSCommandGetVCSType( buffer )
-            echomsg "type =".vcsType 
-            " let vcsType = "svn"
 
             " create object for unite sorce by vcsType and command 
             let l:obj   = unite#libs#vcs#{vcsType}#{self.vcs_command}#new()
-            " let l:obj   = unite#libs#{vcsType}#{self.vcs_command}#new()
 
             call l:obj.initialize(a:args)
             return map(obj.get_unite_normalized_data(self.name), '{

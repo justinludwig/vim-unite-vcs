@@ -1,6 +1,6 @@
 "==========================================================================
 " FILE:     status.vim
-" AUTHOR:   kmnk <kmnknmk+vim@gmail.com>
+" AUTHOR:   umezo <umezo100+vim@gmail.com>
 " Version: 0.1.0
 "==========================================================================
 
@@ -58,7 +58,7 @@ function! s:str2list(str)
 endfunction
 
 function! s:get_lines()
-    return s:str2list(system('svn st'))
+    return s:str2list(system('git status -s'))
 endfunction
 
 function! s:get_label_of(column, symbol)
@@ -93,6 +93,7 @@ endfunction
 "}}}
 
 function! s:get_data_list()
+    return s:get_lines()
     return map(
 \       filter(
 \           s:get_lines(), '
@@ -111,7 +112,7 @@ function! s:gen_data_by(list)
 \   }
 endfunction
 
-function! unite#libs#svn#status#new()
+function! unite#libs#vcs#git#status#new()
     let l:obj   = {}
 
     function l:obj.initialize(args)
