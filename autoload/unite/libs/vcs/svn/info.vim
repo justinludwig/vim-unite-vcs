@@ -35,7 +35,7 @@ function! s:get_pairs(line)"{{{
 endfunction
 "}}}
 
-function! unite#libs#svn#info#new()"{{{
+function! unite#libs#vcs#svn#info#new()"{{{
   let l:obj = {}
 
   function l:obj.initialize(params)
