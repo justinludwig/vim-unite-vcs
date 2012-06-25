@@ -111,7 +111,7 @@ function! s:gen_data_by(list)
 \   }
 endfunction
 
-function! unite#libs#svn#status#new()
+function! unite#libs#vcs#svn#status#new()
     let l:obj   = {}
 
     function l:obj.initialize(args)
