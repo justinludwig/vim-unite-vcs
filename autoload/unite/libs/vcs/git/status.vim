@@ -9,6 +9,9 @@ set cpo&vim
 
 "{{{ symbol tables
 let s:symbol_tables = [ 
+\   { 
+\       ' ' : '' 
+\   } ,
 \   {
 \       ' ' : 'NoChange',
 \       'A' : 'Added',
@@ -21,35 +24,7 @@ let s:symbol_tables = [
 \       '?' : '?',
 \       '!' : '!',
 \       '~' : '~',
-\   },
-\   {
-\       ' ' : 'NoChange',
-\       'C' : 'Conflicted',
-\       'M' : 'Modified',
-\   },
-\   {
-\       ' ' : 'NoLock',
-\       'L' : 'Locked',
-\   },
-\   {
-\       ' ' : '',
-\       '+' : '+',
-\   },
-\   {
-\       ' ' : 'NoSwitch',
-\       'S' : 'Switched',
-\   },
-\   {
-\       ' ' : '',
-\       'K' : 'K',
-\       'O' : 'O',
-\       'T' : 'T',
-\       'B' : 'B',
-\   },
-\   {
-\       ' ' : '',
-\       '*' : '*',
-\   },
+\   }
 \]
 "}}}
 
@@ -93,7 +68,6 @@ endfunction
 "}}}
 
 function! s:get_data_list()
-    return s:get_lines()
     return map(
 \       filter(
 \           s:get_lines(), '
@@ -107,8 +81,8 @@ endfunction
 
 function! s:gen_data_by(list)
     return {
-\       'change'    : s:get_label_of(0, a:list[1]),
-\       'path'      : a:list[8],
+\       'change'    : s:get_label_of(1, a:list[2]),
+\       'path'      : a:list[3],
 \   }
 endfunction
 
