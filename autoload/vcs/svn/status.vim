@@ -1,3 +1,6 @@
+let s:save_cpo  = &cpo
+set cpo&vim
+
 function! vcs#svn#status#do(...)
   let target = call('vcs#target', a:000)
   let str = s:system(target)
@@ -75,4 +78,7 @@ let s:symbols = [{
       \   'T' : 'T',
       \   'B' : 'B',
       \ }]
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
 
