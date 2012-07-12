@@ -19,7 +19,7 @@ function! vcs#detect(...)
     let s:detect_cache[target] = 'svn'
     return 'svn'
   endif
-  echoerr 'vcs can not detected.'
+  echoerr 'vcs can not detected: ' . target
 endfunction
 
 function! vcs#vcs(command, ...)
@@ -31,6 +31,15 @@ endfunction
 
 function! vcs#target(...)
   let arg = a:0 > 0 ? a:1 : expand('%')
+  if a:0 > 0
+    let filetype = getbufvar(bufnr('%'), '&filetype')
+    if filetype == 'vimshell'
+      let arg = b:vimshell.current_dir
+    endif
+    if filetype == 'vimfiler'
+      let arg = b:vimfiler.current_dir
+    endif
+  endif
   let target = type(arg) == type([]) ? arg[0] : arg
   let target = escape(fnamemodify(target, ':p'), ' ')
   return target
