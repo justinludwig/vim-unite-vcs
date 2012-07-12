@@ -1,3 +1,6 @@
+let s:save_cpo  = &cpo
+set cpo&vim
+
 function! unite#sources#vcs_status#define()
   return s:source
 endfunction
@@ -16,4 +19,7 @@ function! s:source.gather_candidates(args, context)
         \ 'kind': 'vcs/status'
         \ }")
 endfunction
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
 

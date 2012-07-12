@@ -1,3 +1,6 @@
+let s:save_cpo  = &cpo
+set cpo&vim
+
 function! unite#kinds#vcs_log#define()
   return s:kind
 endfunction
@@ -53,4 +56,7 @@ function! s:kind.action_table.diff.func(candidates)
   call feedkeys('dd')
   diffthis
 endfunction
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
 

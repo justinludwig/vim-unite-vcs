@@ -1,7 +1,6 @@
 let s:save_cpo  = &cpo
 set cpo&vim
 
-
 function! vcs#svn#cat#do(...)
   let target = call('vcs#target', a:000)
   let revision = a:0 == 2 ? substitute(a:2, '[^[:digit:]]', '', 'g') : 'HEAD'
@@ -14,6 +13,6 @@ function! vcs#svn#cat#do(...)
         \ ], ' ')), '\r', '', 'g')
 endfunction
 
-
 let &cpo = s:save_cpo
 unlet s:save_cpo
+
