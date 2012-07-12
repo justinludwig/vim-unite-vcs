@@ -27,7 +27,9 @@ let s:kind.action_table.add = {
       \ }
 function! s:kind.action_table.add.func(candidates)
   let candidates = type(a:candidates) == type([]) ? a:candidates : [a:candidates]
-  echomsg vcs#vcs('add', map(a:candidates, "v:val.action__path"))
+  for message in split(vcs#vcs('add', map(a:candidates, "v:val.action__path")), '\n')
+    echomsg message
+  endfor
 endfunction
 
 let s:kind.action_table.delete = {
@@ -36,7 +38,9 @@ let s:kind.action_table.delete = {
       \ }
 function! s:kind.action_table.delete.func(candidates)
   let candidates = type(a:candidates) == type([]) ? a:candidates : [a:candidates]
-  echomsg vcs#vcs('delete', map(a:candidates, "v:val.action__path"))
+  for message in split(vcs#vcs('delete', map(a:candidates, "v:val.action__path")), '\n')
+    echomsg message
+  endfor
 endfunction
 
 let s:kind.action_table.revert = {
@@ -45,7 +49,9 @@ let s:kind.action_table.revert = {
       \ }
 function! s:kind.action_table.revert.func(candidates)
   let candidates = type(a:candidates) == type([]) ? a:candidates : [a:candidates]
-  call vcs#vcs('revert', map(candidates, "v:val.action__path"))
+  for message in split(vcs#vcs('revert', map(a:candidates, "v:val.action__path")), '\n')
+    echomsg message
+  endfor
 endfunction
 
 let s:kind.action_table.diff = {

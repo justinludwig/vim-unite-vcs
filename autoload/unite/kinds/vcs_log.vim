@@ -18,7 +18,8 @@ let s:kind.action_table.diff = {
       \ }
 function! s:kind.action_table.diff.func(candidates)
   if len(a:candidates) > 2
-    echoerr 'invalid candidates length.'
+    echomsg 'invalid candidates length.'
+    return
   endif
 
   " for diff original.
@@ -31,7 +32,7 @@ function! s:kind.action_table.diff.func(candidates)
     set nobuflisted
     set buftype=nofile
     set noswapfile
-    call append('$', split(vcs#vcs('cat', [candidate.action__path, candidate.action__revision]), '\n')
+    call append('$', split(vcs#vcs('cat', [candidate.action__path, candidate.action__revision]), '\n'))
     call feedkeys('dd')
     diffthis
     return
@@ -42,7 +43,7 @@ function! s:kind.action_table.diff.func(candidates)
   set nobuflisted
   set buftype=nofile
   set noswapfile
-  call append('$', split(vcs#vcs('cat', [candidate.action__path, candidate.action__revision]), '\n')
+  call append('$', split(vcs#vcs('cat', [candidate.action__path, candidate.action__revision]), '\n'))
   call feedkeys('dd')
   diffthis
 
@@ -52,7 +53,7 @@ function! s:kind.action_table.diff.func(candidates)
   set nobuflisted
   set buftype=nofile
   set noswapfile
-  call append('$', split(vcs#vcs('cat', [candidate_.action__path, candidate_.action__revision]), '\n')
+  call append('$', split(vcs#vcs('cat', [candidate_.action__path, candidate_.action__revision]), '\n'))
   call feedkeys('dd')
   diffthis
 endfunction

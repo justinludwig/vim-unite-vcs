@@ -24,7 +24,6 @@ endfunction
 
 function! vcs#vcs(command, ...)
   let args = a:0 == 1 ? a:1 : []
-
   let target = call('vcs#target', args)
   let type = vcs#detect(target)
   return call('vcs#' . type . '#' . a:command . '#do', args)

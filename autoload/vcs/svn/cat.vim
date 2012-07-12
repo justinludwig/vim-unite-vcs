@@ -3,13 +3,14 @@ set cpo&vim
 
 function! vcs#svn#cat#do(...)
   let target = call('vcs#target', a:000)
-  let revision = a:0 == 2 ? substitute(a:2, '[^[:digit:]]', '', 'g') : 'HEAD'
+  let revision = a:0 == 2 ? a:2 : 'HEAD'
+
   return substitute(vcs#system(join([
         \ 'svn',
         \ 'cat',
-        \ target,
         \ '--revision',
-        \ revision
+        \ revision,
+        \ target
         \ ], ' ')), '\r', '', 'g')
 endfunction
 
