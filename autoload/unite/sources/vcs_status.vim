@@ -11,7 +11,12 @@ let s:source = {
       \ }
 
 function! s:source.gather_candidates(args, context)
-  let path = len(a:args) > 0 ? a:args[0] : vcs#vcs('root')
+  let path = len(a:args) > 0 ? call('vcs#target', a:args) : vcs#vcs('root')
+  let root = vcs#vcs('root', [path])
+
+  call unite#print_message('[vcs/status] root: ' . root)
+  call unite#print_message('[vcs/status] target: ' . path[strlen(root) + 1:-1])
+
   return map(vcs#vcs('status', [path]), "{
         \ 'word': v:val.status . ' | '. v:val.path[strlen(vcs#vcs('root', [v:val.path])) + 1:-1],
         \ 'action__path': v:val.path,
