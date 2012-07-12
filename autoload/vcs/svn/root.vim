@@ -1,3 +1,6 @@
+let s:save_cpo  = &cpo
+set cpo&vim
+
 function! vcs#svn#root#do(...)
   let target = fnamemodify(call('vcs#target', a:000), ':p:h')
   let prev = ''
@@ -7,4 +10,7 @@ function! vcs#svn#root#do(...)
   endwhile
   return prev
 endfunction
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
 

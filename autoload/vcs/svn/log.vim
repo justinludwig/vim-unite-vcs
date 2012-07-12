@@ -1,3 +1,6 @@
+let s:save_cpo  = &cpo
+set cpo&vim
+
 function! vcs#svn#log#do(...)
   let target = call('vcs#target', a:000)
   let str = s:system(target)
@@ -32,4 +35,7 @@ function! s:parse(target, list)
         \ 'path': a:target
         \ }")
 endfunction
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
 
