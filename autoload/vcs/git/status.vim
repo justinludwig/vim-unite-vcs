@@ -1,3 +1,8 @@
+let s:save_cpo  = &cpo
+set cpo&vim
+
+
+
 function! vcs#git#status#do(...)
   let target = call('vcs#target', a:000)
   let str = s:system(target)
@@ -8,10 +13,12 @@ function! vcs#git#status#do(...)
 endfunction
 
 function! s:system(target)
-  let relative = substitute(a:target, vcs#vcs('root', [a:target]), '', 'g')
+  let root = vcs#vcs('root', [a:target])
+  let relative = a:target[strlen(root)+1:-1] 
+
   return vcs#system(join([
         \ 'git',
-        \ '--git-dir=' . vcs#vcs('root', [a:target]) . '/.git',
+        \ '--git-dir=' . root . '/.git',
         \ 'status',
         \ '--short',
         \ relative
@@ -27,6 +34,16 @@ function! s:extract(list)
 endfunction
 
 function! s:parse(list)
-  return a:list
+  return map( a:list , '{
+    \ "path"  :split( v:val , " " )[1] ,
+    \ "status":split( v:val , " " )[0] ,
+    \ "line"  :v:val
+    \ }' )
 endfunction
 
+
+
+
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
