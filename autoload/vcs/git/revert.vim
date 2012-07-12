@@ -8,7 +8,7 @@ function! vcs#git#revert#do(...)
   exec 'lcd ' . vcs#vcs('root', files)
   let result = substitute(vcs#system(join([
         \ 'git',
-        \ 'reset',
+        \ 'checkout',
         \ join(files, ' ')
         \ ])), '\r', '', 'g')
   exec 'lcd ' . cwd
