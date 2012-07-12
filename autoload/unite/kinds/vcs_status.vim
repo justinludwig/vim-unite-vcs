@@ -14,7 +14,8 @@ let s:kind.action_table.commit = {
       \ 'is_selectable': 1
       \ }
 function! s:kind.action_table.commit.func(candidates)
-  call vcs#commit(map(a:candidates, "v:val.action__path")
+  let candidates = type(a:candidates) == type([]) ? a:candidates : [a:candidates]
+  call vcs#vcs('commit', map(candidates, "v:val.action__path"))
 endfunction
 
 let s:kind.action_table.add = {
@@ -22,7 +23,8 @@ let s:kind.action_table.add = {
       \ 'is_selectable': 1
       \ }
 function! s:kind.action_table.add.func(candidates)
-  call vcs#add(map(a:candidates, "v:val.action__path")
+  let candidates = type(a:candidates) == type([]) ? a:candidates : [a:candidates]
+  echomsg vcs#vcs('add', map(a:candidates, "v:val.action__path"))
 endfunction
 
 let s:kind.action_table.delete = {
@@ -30,7 +32,17 @@ let s:kind.action_table.delete = {
       \ 'is_selectable': 1
       \ }
 function! s:kind.action_table.delete.func(candidates)
-  call vcs#delete(map(a:candidates, "v:val.action__path")
+  let candidates = type(a:candidates) == type([]) ? a:candidates : [a:candidates]
+  echomsg vcs#vcs('delete', map(a:candidates, "v:val.action__path"))
+endfunction
+
+let s:kind.action_table.revert = {
+      \ 'description': 'vcs revert for candidate.',
+      \ 'is_selectable': 1
+      \ }
+function! s:kind.action_table.revert.func(candidates)
+  let candidates = type(a:candidates) == type([]) ? a:candidates : [a:candidates]
+  call vcs#vcs('revert', map(candidates, "v:val.action__path"))
 endfunction
 
 let s:kind.action_table.diff = {

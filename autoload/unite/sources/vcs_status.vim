@@ -10,7 +10,7 @@ let s:source = {
 function! s:source.gather_candidates(args, context)
   let path = len(a:args) > 0 ? a:args[0] : vcs#vcs('root')
   return map(vcs#vcs('status', [path]), "{
-        \ 'word': v:val.status . ' | '. substitute(v:val.path, vcs#vcs('root', [v:val.path]), '', 'g'),
+        \ 'word': v:val.status . ' | '. v:val.path[strlen(vcs#vcs('root', [v:val.path])) + 1:-1],
         \ 'action__path': v:val.path,
         \ 'action__status': v:val.status,
         \ 'kind': 'vcs/status'
