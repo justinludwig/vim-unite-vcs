@@ -32,8 +32,9 @@ function! s:kind.action_table.diff.func(candidates)
     set nobuflisted
     set buftype=nofile
     set noswapfile
-    call append('$', split(vcs#vcs('cat', [candidate.action__path, candidate.action__revision]), '\n'))
-    call feedkeys('dd')
+    let lines = split(vcs#vcs('cat', [candidate.action__path, candidate.action__revision]), '\n')
+    call setline(1, lines[0])
+    call append('.', lines[1:-1])
     diffthis
     return
   endif
@@ -43,8 +44,9 @@ function! s:kind.action_table.diff.func(candidates)
   set nobuflisted
   set buftype=nofile
   set noswapfile
-  call append('$', split(vcs#vcs('cat', [candidate.action__path, candidate.action__revision]), '\n'))
-  call feedkeys('dd')
+  let lines = split(vcs#vcs('cat', [candidate.action__path, candidate.action__revision]), '\n')
+  call setline(1, lines[0])
+  call append('.', lines[1:-1])
   diffthis
 
   let candidate_ = a:candidates[1]
@@ -53,8 +55,9 @@ function! s:kind.action_table.diff.func(candidates)
   set nobuflisted
   set buftype=nofile
   set noswapfile
-  call append('$', split(vcs#vcs('cat', [candidate_.action__path, candidate_.action__revision]), '\n'))
-  call feedkeys('dd')
+  let lines = split(vcs#vcs('cat', [candidate_.action__path, candidate_.action__revision]), '\n')
+  call setline(1, lines[0])
+  call append('.', lines[1:-1])
   diffthis
 endfunction
 
