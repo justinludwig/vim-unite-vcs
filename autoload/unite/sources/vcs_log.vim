@@ -11,8 +11,13 @@ let s:source = {
       \ }
 
 function! s:source.gather_candidates(args, context)
-  let path = len(a:args) > 0 ? a:args[0] : vcs#vcs('root')
+  let path = call('vcs#target', a:args)
+  let root = vcs#vcs('root', [path])
   let logs = vcs#vcs('log', [path])
+
+  call unite#print_message('[vcs/log] root: ' . root)
+  call unite#print_message('[vcs/log] target: ' . path[strlen(root) + 1:-1])
+
   let revisionlen = max(map(copy(logs), "strlen(v:val.revision)"))
   let authorlen = max(map(copy(logs), "strlen(split(v:val.author, ' ')[0])"))
   return map(logs, "{
