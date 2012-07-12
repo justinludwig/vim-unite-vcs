@@ -1,7 +1,7 @@
 let s:save_cpo  = &cpo
 set cpo&vim
 
-function! vcs#git#status#do(...)
+function! vcs#git#log#do(...)
   let target = call('vcs#target', a:000)
   let str = s:system(target)
   let list = s:str2list(str)
@@ -15,8 +15,7 @@ function! s:system(target)
   exec 'cd ' . vcs#vcs('root', [a:target])
   let result = vcs#system(join([
         \ 'git',
-        \ 'status',
-        \ '--short',
+        \ 'log',
         \ a:target
         \ ], ' '))
   exec 'cd ' . cwd
@@ -24,20 +23,20 @@ function! s:system(target)
 endfunction
 
 function! s:str2list(str)
-  return split(a:str, '\n')
+    return split(a:str, 'commit ')
 endfunction
 
 function! s:extract(list)
-  return a:list
+  return filter(map(a:list, 'split(v:val, "\n")'), 'len(v:val) > 2')
 endfunction
 
 function! s:parse(target, list)
-  let root = vcs#vcs('root', [a:target])
-  return map(a:list, "{
-        \ 'path': root . '/' . v:val[3:-1],
-        \ 'status': v:val[0:2],
-        \ 'line': v:val
-        \ }")
+  return map(a:list, '{
+        \ "revision": v:val[0],
+        \ "author": split(v:val[1], "Author: ")[0],
+        \ "message": v:val[4][4:-1],
+        \ "path": a:target
+        \ }')
 endfunction
 
 let &cpo = s:save_cpo

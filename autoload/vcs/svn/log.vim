@@ -29,7 +29,7 @@ endfunction
 
 function! s:parse(target, list)
   return map(a:list, "{
-        \ 'revision': split(v:val[0], '|')[0],
+        \ 'revision': substitute(split(v:val[0], '|')[0], '[^[:digit:]]', '', 'g'),
         \ 'author': split(v:val[0], '|')[1],
         \ 'message': v:val[2],
         \ 'path': a:target
