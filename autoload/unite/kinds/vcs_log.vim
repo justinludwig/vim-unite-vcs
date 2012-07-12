@@ -28,7 +28,7 @@ function! s:kind.action_table.diff.func(candidates)
     set nobuflisted
     set buftype=nofile
     set noswapfile
-    call append('$', split(vcs#cat(candidate.action__path, candidate.action__revision), '\n'))
+    call append('$', split(vcs#vcs('cat', [candidate.action__path, candidate.action__revision]), '\n')
     call feedkeys('dd')
     diffthis
     return
@@ -39,7 +39,7 @@ function! s:kind.action_table.diff.func(candidates)
   set nobuflisted
   set buftype=nofile
   set noswapfile
-  call append('$', split(vcs#cat(candidate.action__path, candidate.action__revision), '\n'))
+  call append('$', split(vcs#vcs('cat', [candidate.action__path, candidate.action__revision]), '\n')
   call feedkeys('dd')
   diffthis
 
@@ -49,7 +49,7 @@ function! s:kind.action_table.diff.func(candidates)
   set nobuflisted
   set buftype=nofile
   set noswapfile
-  call append('$', split(vcs#cat(candidate_.action__path, candidate_.action__revision), '\n'))
+  call append('$', split(vcs#vcs('cat', [candidate_.action__path, candidate_.action__revision]), '\n')
   call feedkeys('dd')
   diffthis
 endfunction

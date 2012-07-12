@@ -13,7 +13,7 @@ let s:kind.action_table.commit = {
       \ 'description': 'vcs commit for candidate.',
       \ 'is_selectable': 1
       \ }
-function! s:kind.action_table.add.func(candidates)
+function! s:kind.action_table.commit.func(candidates)
   call vcs#commit(map(a:candidates, "v:val.action__path")
 endfunction
 
@@ -46,7 +46,7 @@ function! s:kind.action_table.diff.func(candidates)
     set nobuflisted
     set buftype=nofile
     set noswapfile
-    call append('$', split(vcs#cat(candidate.action__path), '\n'))
+    call append('$', split(vcs#vcs('cat', [candidate.action__path]), '\n'))
     call feedkeys('dd')
     diffthis
   endfor

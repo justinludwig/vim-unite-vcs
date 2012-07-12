@@ -8,8 +8,8 @@ let s:source = {
       \ }
 
 function! s:source.gather_candidates(args, context)
-  let path = len(a:args) > 0 ? a:args[0] : vcs#root()
-  return map(vcs#log(path), "{
+  let path = len(a:args) > 0 ? a:args[0] : vcs#vcs('root')
+  return map(vcs#vcs('log', [path]), "{
         \ 'word': v:val.revision . ' | '. v:val.author . ' | '. v:val.message,
         \ 'action__path': v:val.path,
         \ 'action__revision': v:val.revision,
@@ -18,5 +18,4 @@ function! s:source.gather_candidates(args, context)
         \ 'kind': 'vcs/log'
         \ }")
 endfunction
-
 

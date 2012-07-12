@@ -1,12 +1,11 @@
 function! vcs#svn#cat#do(...)
-  let file = call('vcs#get_file', a:000)
+  let target = call('vcs#target', a:000)
   let revision = a:0 == 2 ? substitute(a:2, '[^[:digit:]]', '', 'g') : 'HEAD'
   return substitute(vcs#system(join([
         \ 'svn',
         \ 'cat',
-        \ file,
+        \ target,
         \ '--revision',
         \ revision
         \ ], ' ')), '\r', '', 'g')
 endfunction
-
