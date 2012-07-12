@@ -28,7 +28,8 @@ function! vcs#vcs(command, ...)
 endfunction
 
 function! vcs#target(...)
-  let target = a:0 > 0 ? a:1 : expand('%')
+  let arg = a:0 > 0 ? a:1 : expand('%')
+  let target = type(arg) == type([]) ? arg[0] : arg
   let target = escape(fnamemodify(target, ':p'), ' ')
   return target
 endfunction
