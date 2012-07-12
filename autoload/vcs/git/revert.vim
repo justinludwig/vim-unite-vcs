@@ -5,13 +5,13 @@ function! vcs#git#revert#do(...)
   let files = a:0 == 1 ? (type(a:1) == type([]) ? a:1 : [a:1]) : a:000
 
   let cwd = getcwd()
-  exec 'cd ' . vcs#vcs('root', files)
+  exec 'lcd ' . vcs#vcs('root', files)
   let result = substitute(vcs#system(join([
         \ 'git',
         \ 'reset',
         \ join(files, ' ')
         \ ])), '\r', '', 'g')
-  exec 'cd ' . cwd
+  exec 'lcd ' . cwd
   return result
 endfunction
 
