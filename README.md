@@ -16,15 +16,15 @@ Example
 
     :Unite vcs/log     " will be shown your commit logs.
                        " select a revision you want diff.
-    <tab>              " press tab to chose an unite action
-    diff               " chose diff action. will be shown diff between working copy and selected revision.
+    <tab>              " press tab to choose an unite action
+    diff               " choose diff action. will be shown diff between working copy and selected revision.
     
 ### check status and commit 
 
     :Unite vcs/status  " will be shown your commit logs.
                        " select file(s) you want to commit
-    <tab>              " press tab to chose commit action
-    commit             " chose commit action. 
+    <tab>              " press tab to choose commit action
+    commit             " choose commit action. 
 
 Source
 ------------------------------
