@@ -1,58 +1,36 @@
-" common.
-" 
-let s:detect_file_cache = {}
-function! vcs#detect(...)
-  let file = call('vcs#get_file', a:000)
+let s:detect_cache = {}
 
-  " get cache.
-  if exists('s:detect_file_cache[file]')
-    return s:detect_file_cache[file]
+function! vcs#detect(...)
+  let target = call('vcs#target', a:000)
+
+  if exists('s:detect_cache[target]')
+    return s:detect_cache[target]
   endif
 
   " try detect.
-  if executable('git') && finddir('.git', file . ';', ':p:h:h') != ''
-    let s:detect_file_cache[file] = 'git'
+  if executable('git') && finddir('.git', target . ';', ':p:h:h') != ''
+    let s:detect_cache[target] = 'git'
     return 'git'
   endif
-  if executable('svn') && finddir('.svn', file . ';', ':p:h:h') != ''
-    let s:detect_file_cache[file] = 'svn'
+  if executable('svn') && finddir('.svn', target . ';', ':p:h:h') != ''
+    let s:detect_cache[target] = 'svn'
     return 'svn'
   endif
   echoerr 'vcs can not detected.'
 endfunction
 
-" action.
+function! vcs#vcs(command, ...)
+  let args = a:0 == 1 ? a:1 : []
 
-function! vcs#root(...)
-  let file = call('vcs#get_file', a:000)
-  let vcs = vcs#detect(file)
-  return call('vcs#' . vcs . '#root#do', a:000)
+  let target = call('vcs#target', args)
+  let type = vcs#detect(target)
+  return call('vcs#' . type . '#' . a:command . '#do', args)
 endfunction
 
-function! vcs#cat(...)
-  let file = call('vcs#get_file', a:000)
-  let vcs = vcs#detect(file)
-  return call('vcs#' . vcs . '#cat#do', a:000)
-endfunction
-
-function! vcs#status(...)
-  let file = call('vcs#get_file', a:000)
-  let vcs = vcs#detect(file)
-  return call('vcs#' . vcs . '#status#do', a:000)
-endfunction
-
-function! vcs#log(...)
-  let file = call('vcs#get_file', a:000)
-  let vcs = vcs#detect(file)
-  return call('vcs#' . vcs . '#log#do', a:000)
-endfunction
-
-" util.
-
-function! vcs#get_file(...)
-  let file = a:0 > 0 ? a:1 : expand('%')
-  let file = escape(fnamemodify(file, ':p'), ' ')
-  return file
+function! vcs#target(...)
+  let target = a:0 > 0 ? a:1 : expand('%')
+  let target = escape(fnamemodify(target, ':p'), ' ')
+  return target
 endfunction
 
 function! vcs#system(...)

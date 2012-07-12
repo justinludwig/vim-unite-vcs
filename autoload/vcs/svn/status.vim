@@ -1,18 +1,17 @@
 function! vcs#svn#status#do(...)
-  let file = call('vcs#get_file', a:000)
-  let str = s:system(file)
+  let target = call('vcs#target', a:000)
+  let str = s:system(target)
   let list = s:str2list(str)
   let list = s:extract(list)
   let list = s:parse(list)
   return list
 endfunction
 
-function! s:system(...)
-  let file = call('vcs#get_file', a:000)
+function! s:system(target)
   return vcs#system(join([
         \ 'svn',
         \ 'status',
-        \ file
+        \ a:target
         \ ], ' '))
 endfunction
 
