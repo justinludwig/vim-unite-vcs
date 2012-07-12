@@ -67,8 +67,9 @@ function! s:kind.action_table.diff.func(candidates)
     set nobuflisted
     set buftype=nofile
     set noswapfile
-    call append('$', split(vcs#vcs('cat', [candidate.action__path]), '\n'))
-    call feedkeys('dd')
+    let lines = split(vcs#vcs('cat', [candidate.action__path]), '\n')
+    call setline(1, lines[0])
+    call append('.', lines[1:-1])
     diffthis
   endfor
 endfunction
