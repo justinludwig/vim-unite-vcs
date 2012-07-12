@@ -13,10 +13,10 @@ let s:source = {
 function! s:source.gather_candidates(args, context)
   let path = len(a:args) > 0 ? a:args[0] : vcs#vcs('root')
   let logs = vcs#vcs('log', [path])
-  let revisionlength = max(map(copy(logs), "strlen(v:val.revision)"))
-  let authorlength = max(map(copy(logs), "strlen(split(v:val.author, ' ')[0])"))
+  let revisionlen = max(map(copy(logs), "strlen(v:val.revision)"))
+  let authorlen = max(map(copy(logs), "strlen(split(v:val.author, ' ')[0])"))
   return map(logs, "{
-        \ 'word': s:padding(v:val.revision, revisionlength) . ' | '. s:padding(split(v:val.author, ' ')[0], authorlength) . ' | ' . v:val.message,
+        \ 'word': s:padding(v:val.revision, revisionlen) . ' | '. s:padding(split(v:val.author, ' ')[0], authorlen) . ' | ' . v:val.message,
         \ 'action__path': v:val.path,
         \ 'action__revision': v:val.revision,
         \ 'action__author': v:val.author,
