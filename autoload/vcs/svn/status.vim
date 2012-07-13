@@ -82,6 +82,7 @@ let s:symbols = [{
       \   'B' : 'B',
       \ }, {
       \   ' ' : ' ',
+      \   'C' : 'Tree Conflicted',
       \   '*' : '*'
       \ }]
 
