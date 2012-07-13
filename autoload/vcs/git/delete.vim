@@ -9,6 +9,8 @@ function! vcs#git#delete#do(...)
   let result = substitute(vcs#system(join([
         \ 'git',
         \ 'rm',
+        \ '-f',
+        \ '--cached',
         \ join(files, ' ')
         \ ])), '\r', '', 'g')
   exec 'lcd ' . cwd
