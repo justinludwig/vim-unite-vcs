@@ -11,10 +11,21 @@ let s:source = {
       \ }
 
 function! s:source.gather_candidates(args, context)
-  let path = call('vcs#target', a:args)
+  if vcs#detect(call('vcs#target', a:args)) == ''
+    let path = len(a:args) > 0 ? call('vcs#target', a:args) : expand('%:p')
+    call unite#print_message('[vcs/status] vcs not detected: ' . path)
+    return []
+  endif
+
+  if !a:context.is_redraw
+    let path = call('vcs#target', a:args)
+    let a:context.source__path = path
+  else
+    let path = a:context.source__path
+  endif
+
   let root = vcs#vcs('root', [path])
   let logs = vcs#vcs('log', [path])
-
   call unite#print_message('[vcs/log] root: ' . root)
   call unite#print_message('[vcs/log] target: ' . path[strlen(root) + 1:-1])
 

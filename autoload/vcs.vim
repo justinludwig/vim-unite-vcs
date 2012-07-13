@@ -19,13 +19,17 @@ function! vcs#detect(...)
     let s:detect_cache[target] = 'svn'
     return 'svn'
   endif
-  echoerr 'vcs can not detected: ' . target
+  return ''
 endfunction
 
 function! vcs#vcs(command, ...)
   let args = a:0 == 1 ? a:1 : []
   let target = call('vcs#target', args)
   let type = vcs#detect(target)
+  if type == ''
+    echoerr 'vcs can not detected: ' . target
+    return
+  endif
   return call('vcs#' . type . '#' . a:command . '#do', args)
 endfunction
 

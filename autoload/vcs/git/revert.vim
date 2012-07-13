@@ -6,11 +6,28 @@ function! vcs#git#revert#do(...)
 
   let cwd = getcwd()
   exec 'lcd ' . vcs#vcs('root', files)
-  let result = substitute(vcs#system(join([
-        \ 'git',
-        \ 'checkout',
-        \ join(files, ' ')
-        \ ])), '\r', '', 'g')
+
+  let result = ''
+  for file in files
+    let status = vcs#vcs('status', [file])
+    if status[0].status =~ 'A\|D'
+      let result = result . '\n' . substitute(vcs#system(join([
+            \ 'git',
+            \ 'reset',
+            \ file,
+            \ ])), '\r', '', 'g')
+      continue
+    endif
+    if status[0].status =~ 'M'
+      let result = result . '\n' . substitute(vcs#system(join([
+            \ 'git',
+            \ 'checkout',
+            \ file,
+            \ ])), '\r', '', 'g')
+      continue
+    endif
+  endfor
+
   exec 'lcd ' . cwd
   return result
 endfunction
