@@ -29,8 +29,8 @@ endfunction
 function! s:parse(list)
   let list = map(a:list, "matchlist(v:val, s:get_line_pattern())")
   return map(list, "{
-        \   'path': v:val[6],
-        \   'status': v:val[1] . v:val[2] . v:val[3] . v:val[4] . v:val[5],
+        \   'path': v:val[8],
+        \   'status': v:val[1] . v:val[2] . v:val[3] . v:val[4] . v:val[5] . v:val[6] . v:val[7],
         \   'line': v:val[0]
         \ }")
 endfunction
@@ -69,14 +69,20 @@ let s:symbols = [{
       \   ' ' : 'NoLock',
       \   'L' : 'Locked',
       \ }, {
+      \   ' ' : ' ',
+      \   '+' : '+',
+      \ }, {
       \   ' ' : 'NoSwitch',
       \   'S' : 'Switched',
       \ }, {
-      \   ' ' : '',
+      \   ' ' : ' ',
       \   'K' : 'K',
       \   'O' : 'O',
       \   'T' : 'T',
       \   'B' : 'B',
+      \ }, {
+      \   ' ' : ' ',
+      \   '*' : '*'
       \ }]
 
 let &cpo = s:save_cpo
