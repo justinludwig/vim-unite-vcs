@@ -12,7 +12,7 @@ let s:source = {
 
 function! s:source.gather_candidates(args, context)
   if vcs#detect(call('vcs#target', a:args)) == ''
-    let path = len(a:args) > 0 ? call('vcs#target', a:args) : expand('%:p')
+    let path = len(a:args) > 0 ? call('vcs#target', a:args) : expand('%')
     call unite#print_message('[vcs/status] vcs not detected: ' . path)
     return []
   endif
