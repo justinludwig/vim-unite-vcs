@@ -14,7 +14,7 @@ let s:kind = {
 
 let s:kind.action_table.diff = {
       \ 'description': 'diff with original.',
-      \ 'is_selectable': 1
+      \ 'is_selectable': 1,
       \ }
 function! s:kind.action_table.diff.func(candidates)
   if len(a:candidates) > 2
@@ -28,36 +28,39 @@ function! s:kind.action_table.diff.func(candidates)
     exec 'tabedit ' . candidate.action__path
     diffthis
     vnew
-    set bufhidden
+    set bufhidden=hide
     set nobuflisted
     set buftype=nofile
     set noswapfile
     let lines = split(vcs#vcs('cat', [candidate.action__path, candidate.action__revision]), '\n')
     call setline(1, lines[0])
     call append('.', lines[1:-1])
+    exec 'file ' . candidate.action__revision
     diffthis
     return
   endif
 
   tabnew
-  set bufhidden
+  set bufhidden=hide
   set nobuflisted
   set buftype=nofile
   set noswapfile
   let lines = split(vcs#vcs('cat', [candidate.action__path, candidate.action__revision]), '\n')
   call setline(1, lines[0])
   call append('.', lines[1:-1])
+  exec 'file ' . candidate.action__revision
   diffthis
 
   let candidate_ = a:candidates[1]
   vnew
-  set bufhidden
+  set bufhidden=hide
   set nobuflisted
   set buftype=nofile
   set noswapfile
   let lines = split(vcs#vcs('cat', [candidate_.action__path, candidate_.action__revision]), '\n')
   call setline(1, lines[0])
   call append('.', lines[1:-1])
+  exec 'file ' . candidate_.action__revision
   diffthis
 endfunction
 

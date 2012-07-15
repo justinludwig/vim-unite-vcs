@@ -1,8 +1,8 @@
 let s:save_cpo  = &cpo
 set cpo&vim
 
-function! vcs#git#status#do(...)
-  let target = call('vcs#target', a:000)
+function! vcs#git#status#do(args)
+  let target = vcs#target(a:args)
   let str = s:system(target)
   let list = s:str2list(str)
   let list = s:extract(list)
