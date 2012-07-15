@@ -10,7 +10,6 @@ function! vcs#detect(args)
     return s:detect_cache[target]
   endif
 
-  " try detect.
   if executable('git') && finddir('.git', target . ';', ':p:h:h') != ''
     let s:detect_cache[target] = 'git'
     return 'git'
