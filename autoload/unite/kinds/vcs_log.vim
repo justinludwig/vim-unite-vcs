@@ -12,6 +12,18 @@ let s:kind = {
       \ 'parents': ['file']
       \ }
 
+let s:kind.action_table.yank_comment = {
+      \ 'description': 'yank commit message.',
+      \ 'is_selectable': 0,
+      \ }
+function! s:kind.action_table.yank_comment.func(candidates)
+  let candidate = type(a:candidates) == type([]) ? a:candidates[0] : a:candidates
+  let @" = candidate.action__message
+  if has('clipboard')
+    let @* = @"
+  endif
+endfunction
+
 let s:kind.action_table.diff = {
       \ 'description': 'diff with original.',
       \ 'is_selectable': 1,
