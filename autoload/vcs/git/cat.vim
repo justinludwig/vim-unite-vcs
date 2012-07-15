@@ -1,8 +1,8 @@
 let s:save_cpo  = &cpo
 set cpo&vim
 
-function! vcs#git#cat#do(...)
-  let target = call('vcs#target', a:000)
+function! vcs#git#cat#do(args)
+  let target = vcs#target(a:args)
   let revision = a:0 == 2 ? a:2 : 'HEAD'
   let root = vcs#vcs('root', [target])
 

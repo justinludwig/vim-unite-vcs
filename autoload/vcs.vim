@@ -3,8 +3,8 @@ set cpo&vim
 
 let s:detect_cache = {}
 
-function! vcs#detect(...)
-  let target = call('vcs#target', a:000)
+function! vcs#detect(args)
+  let target = vcs#target(a:args)
 
   if exists('s:detect_cache[target]')
     return s:detect_cache[target]
@@ -22,29 +22,34 @@ function! vcs#detect(...)
   return ''
 endfunction
 
-function! vcs#vcs(command, ...)
-  let args = a:0 == 1 ? a:1 : []
-  let target = call('vcs#target', args)
+function! vcs#vcs(command, args)
+  let target = vcs#target(a:args)
   let type = vcs#detect(target)
   if type == ''
     echoerr 'vcs can not detected: ' . target
     return
   endif
-  return call('vcs#' . type . '#' . a:command . '#do', args)
+  return {'vcs#' . type . '#' . a:command . '#do'}(a:args)
 endfunction
 
-function! vcs#target(...)
-  let arg = a:0 > 0 ? a:1 : expand('%')
-  if a:0 > 0
-    let filetype = getbufvar(bufnr('%'), '&filetype')
-    if filetype == 'vimshell'
-      let arg = b:vimshell.current_dir
+function! vcs#target(args)
+  if type(a:args) == type([])
+    let args = a:args
+    if len(args) == 0
+      let args = [expand('%')]
+
+      let filetype = getbufvar(bufnr('%'), '&filetype')
+      if filetype == 'vimshell'
+        let args = [b:vimshell.current_dir]
+      endif
+      if filetype == 'vimfiler'
+        let args = [b:vimfiler.current_dir]
+      endif
     endif
-    if filetype == 'vimfiler'
-      let arg = b:vimfiler.current_dir
-    endif
+  else
+    let args = [a:args]
   endif
-  let target = type(arg) == type([]) ? arg[0] : arg
+  let target = type(args) == type([]) ? args[0] : args
   let target = escape(fnamemodify(target, ':p'), ' ')
   return target
 endfunction

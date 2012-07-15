@@ -14,7 +14,9 @@ let s:kind = {
 
 let s:kind.action_table.commit = {
       \ 'description': 'vcs commit for candidate.',
-      \ 'is_selectable': 1
+      \ 'is_selectable': 1,
+      \ 'is_invalidate_cache': 1,
+      \ 'is_quit': 0,
       \ }
 function! s:kind.action_table.commit.func(candidates)
   let candidates = type(a:candidates) == type([]) ? a:candidates : [a:candidates]
@@ -23,62 +25,67 @@ endfunction
 
 let s:kind.action_table.add = {
       \ 'description': 'vcs add for candidate.',
-      \ 'is_selectable': 1
+      \ 'is_selectable': 1,
+      \ 'is_invalidate_cache': 1,
+      \ 'is_quit': 0,
       \ }
 function! s:kind.action_table.add.func(candidates)
   let candidates = type(a:candidates) == type([]) ? a:candidates : [a:candidates]
   for message in split(vcs#vcs('add', map(copy(candidates), "v:val.action__path")), '\n')
     echomsg message
   endfor
-  call unite#start([['vcs/status', candidates[0].source__path]])
 endfunction
 
 let s:kind.action_table.delete = {
       \ 'description': 'vcs delete for candidate.',
-      \ 'is_selectable': 1
+      \ 'is_selectable': 1,
+      \ 'is_invalidate_cache': 1,
+      \ 'is_quit': 0,
       \ }
 function! s:kind.action_table.delete.func(candidates)
   let candidates = type(a:candidates) == type([]) ? a:candidates : [a:candidates]
   for message in split(vcs#vcs('delete', map(copy(candidates), "v:val.action__path")), '\n')
     echomsg message
   endfor
-  call unite#start([['vcs/status', candidates[0].source__path]])
 endfunction
 
 let s:kind.action_table.revert = {
       \ 'description': 'vcs revert for candidate.',
-      \ 'is_selectable': 1
+      \ 'is_selectable': 1,
+      \ 'is_invalidate_cache': 1,
+      \ 'is_quit': 0,
       \ }
 function! s:kind.action_table.revert.func(candidates)
   let candidates = type(a:candidates) == type([]) ? a:candidates : [a:candidates]
   for message in split(vcs#vcs('revert', map(copy(candidates), "v:val.action__path")), '\n')
     echomsg message
   endfor
-  call unite#start([['vcs/status', candidates[0].source__path]])
 endfunction
 
 let s:kind.action_table.resolve = {
       \ 'description': 'vcs resolve for candidate.',
-      \ 'is_selectable': 1
+      \ 'is_selectable': 1,
+      \ 'is_invalidate_cache': 1,
+      \ 'is_quit': 0,
       \ }
 function! s:kind.action_table.resolve.func(candidates)
   let candidates = type(a:candidates) == type([]) ? a:candidates : [a:candidates]
   for message in split(vcs#vcs('resolve', map(copy(candidates), "v:val.action__path")), '\n')
     echomsg message
   endfor
-  call unite#start([['vcs/status', candidates[0].source__path]])
 endfunction
 
 let s:kind.action_table.resolved = {
       \ 'description': 'vcs resolved for candidate.',
-      \ 'is_selectable': 1
+      \ 'is_selectable': 1,
+      \ 'is_invalidate_cache': 1,
+      \ 'is_quit': 0,
       \ }
 function! s:kind.action_table.resolved.func(candidates)
   let candidates = type(a:candidates) == type([]) ? a:candidates : [a:candidates]
   for message in split(vcs#vcs('resolved', map(copy(candidates), "v:val.action__path")), '\n')
     echomsg message
   endfor
-  call unite#start([['vcs/status', candidates[0].source__path]])
 endfunction
 
 let s:kind.action_table.diff = {
@@ -90,13 +97,14 @@ function! s:kind.action_table.diff.func(candidates)
     exec 'tabedit ' . candidate.action__path
     diffthis
     vnew
-    set bufhidden
+    set bufhidden=hide
     set nobuflisted
     set buftype=nofile
     set noswapfile
     let lines = split(vcs#vcs('cat', [candidate.action__path]), '\n')
     call setline(1, lines[0])
     call append('.', lines[1:-1])
+    exec 'file HEAD'
     diffthis
   endfor
 endfunction

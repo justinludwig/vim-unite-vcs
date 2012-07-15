@@ -1,8 +1,8 @@
 let s:save_cpo  = &cpo
 set cpo&vim
 
-function! vcs#git#delete#do(...)
-  let files = a:0 == 1 ? (type(a:1) == type([]) ? a:1 : [a:1]) : a:000
+function! vcs#git#delete#do(args)
+  let files = type(a:args) == type([]) ? a:args : [a:args]
 
   let cwd = getcwd()
   exec 'lcd ' . vcs#vcs('root', files)
