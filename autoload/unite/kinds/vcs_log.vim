@@ -40,39 +40,39 @@ function! s:kind.action_table.diff.func(candidates)
     exec 'tabedit ' . candidate.action__path
     diffthis
     vnew
-    set bufhidden=hide
+    set bufhidden=delete
     set nobuflisted
     set buftype=nofile
     set noswapfile
     let lines = split(vcs#vcs('cat', [candidate.action__path, candidate.action__revision]), '\n')
     call setline(1, lines[0])
     call append('.', lines[1:-1])
-    exec 'file ' . candidate.action__revision
+    exec 'file [' . candidate.action__revision . '] ' . candidate.action__path
     diffthis
     return
   endif
 
   tabnew
-  set bufhidden=hide
+  set bufhidden=delete
   set nobuflisted
   set buftype=nofile
   set noswapfile
   let lines = split(vcs#vcs('cat', [candidate.action__path, candidate.action__revision]), '\n')
   call setline(1, lines[0])
   call append('.', lines[1:-1])
-  exec 'file ' . candidate.action__revision
+  exec 'file [REMOTE: ' . candidate.action__revision . '] ' . candidate.action__path
   diffthis
 
   let candidate_ = a:candidates[1]
   vnew
-  set bufhidden=hide
+  set bufhidden=delete
   set nobuflisted
   set buftype=nofile
   set noswapfile
   let lines = split(vcs#vcs('cat', [candidate_.action__path, candidate_.action__revision]), '\n')
   call setline(1, lines[0])
   call append('.', lines[1:-1])
-  exec 'file ' . candidate_.action__revision
+  exec 'file [REMOTE: ' . candidate_.action__revision . '] ' . candidate_.action__path
   diffthis
 endfunction
 
