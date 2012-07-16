@@ -23,10 +23,10 @@ function! s:source.gather_candidates(args, context)
   endif
 
   let root = vcs#vcs('root', [path])
-  let logs = vcs#vcs('log', [path])
   call unite#print_message('[vcs/log] root: ' . root)
   call unite#print_message('[vcs/log] target: ' . path[strlen(root) + 1:-1])
 
+  let logs = vcs#vcs('log', [path])
   let revisionlen = max(map(copy(logs), "strlen(v:val.revision)"))
   let authorlen = max(map(copy(logs), "strlen(split(v:val.author, ' ')[0])"))
   return map(logs, "{
