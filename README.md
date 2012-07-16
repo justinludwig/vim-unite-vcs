@@ -14,17 +14,17 @@ Example
 
 ### show log and diff revision
 
-    :Unite vcs/log     " will be shown your commit logs.
+    :Unite vcs/log     " will be shown your commit logs of current buffer.
                        " select a revision you want diff.
     <tab>              " press tab to choose an unite action
     diff               " choose diff action. will be shown diff between working copy and selected revision.
-    
+
 ### check status and commit 
 
-    :Unite vcs/status  " will be shown your commit logs.
+    :Unite vcs/status  " will be shown your unstaged changes of vcs root.
                        " select file(s) you want to commit
     <tab>              " press tab to choose commit action
-    commit             " choose commit action. 
+    commit             " choose commit action.
 
 Source
 ------------------------------
