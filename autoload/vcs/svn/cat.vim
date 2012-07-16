@@ -3,7 +3,7 @@ set cpo&vim
 
 function! vcs#svn#cat#do(args)
   let target = vcs#target(a:args)
-  let revision = a:0 == 2 ? a:2 : 'HEAD'
+  let revision = len(a:args) == 2 ? a:args[1] : 'HEAD'
 
   return substitute(vcs#system(join([
         \ 'svn',
