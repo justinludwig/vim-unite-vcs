@@ -12,12 +12,12 @@ let s:source = {
 
 function! s:source.gather_candidates(args, context)
   if !a:context.is_redraw
-    let path = len(a:args) > 0 ?  vcs#target(a:args) : vcs#vcs('root', a:args)
+    let path = vcs#target(a:args)
     if vcs#detect(path) == ''
       call unite#print_message('[vcs/status] vcs not detected: ' . path)
       return []
     endif
-
+    let path = len(a:args) > 0 ? path : vcs#vcs('root', [path])
     let a:context.source__path = path
   else
     let path = a:context.source__path
