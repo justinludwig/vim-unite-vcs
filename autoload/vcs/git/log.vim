@@ -31,12 +31,20 @@ function! s:extract(list)
 endfunction
 
 function! s:parse(target, list)
-  return map(a:list, '{
+  let logs = map(a:list, '{
         \ "revision": v:val[0],
         \ "author": split(v:val[1], "Author: ")[0],
         \ "message": v:val[4][4:-1],
         \ "path": a:target
         \ }')
+
+  let i = 0
+  while i < len(logs)
+    let logs[i].prev_revision = exists('logs[i + 1].revision')  ? logs[i + 1].revision : ''
+    let i = i + 1
+  endwhile
+
+  return logs
 endfunction
 
 let &cpo = s:save_cpo

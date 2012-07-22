@@ -14,7 +14,6 @@ function! s:system(target)
   return vcs#system(join([
         \ 'svn',
         \ 'log',
-        \ '--limit 50',
         \ a:target
         \ ], ' '))
 endfunction
@@ -28,12 +27,20 @@ function! s:extract(list)
 endfunction
 
 function! s:parse(target, list)
-  return map(a:list, "{
+  let logs = map(a:list, "{
         \ 'revision': substitute(split(v:val[0], '|')[0], '[^[:digit:]]', '', 'g'),
         \ 'author': split(v:val[0], '|')[1],
         \ 'message': v:val[2],
         \ 'path': a:target
         \ }")
+
+  let i = 0
+  while i < len(logs)
+    let logs[i].prev_revision = exists('logs[i + 1].revision')  ? logs[i + 1].revision : ''
+    let i = i + 1
+  endwhile
+
+  return logs
 endfunction
 
 let &cpo = s:save_cpo

@@ -33,6 +33,7 @@ function! s:source.gather_candidates(args, context)
         \ 'word': s:padding(v:val.revision, revisionlen) . ' | '. s:padding(split(v:val.author, ' ')[0], authorlen) . ' | ' . v:val.message,
         \ 'action__path': v:val.path,
         \ 'action__revision': v:val.revision,
+        \ 'action__prev_revision': v:val.prev_revision,
         \ 'action__author': v:val.author,
         \ 'action__message': v:val.message,
         \ 'kind': 'vcs/log'
