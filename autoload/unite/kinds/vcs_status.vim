@@ -9,7 +9,7 @@ let s:kind = {
       \ 'name': 'vcs/status',
       \ 'default_action': 'open',
       \ 'action_table': {},
-      \ 'parents': ['file']
+      \ 'parents': ['vcs/file']
       \ }
 
 let s:kind.action_table.commit = {
@@ -107,15 +107,6 @@ function! s:kind.action_table.diff.func(candidates)
     exec 'file [REMOTE: HEAD] ' . candidate.action__path
     diffthis
   endfor
-endfunction
-
-let s:kind.action_table.log = {
-      \ 'description': 'display candidate log.',
-      \ 'is_selectable': 1
-      \ }
-function! s:kind.action_table.log.func(candidates)
-  let candidate = type(a:candidates) == type([]) ? a:candidates[0] : a:candidates
-  call unite#start([['vcs/log', candidate.action__path]])
 endfunction
 
 let &cpo = s:save_cpo
