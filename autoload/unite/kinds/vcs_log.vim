@@ -9,7 +9,7 @@ let s:kind = {
       \ 'name': 'vcs/log',
       \ 'default_action': 'diff',
       \ 'action_table': {},
-      \ 'parents': ['file']
+      \ 'parents': ['vcs/file']
       \ }
 
 let s:kind.action_table.yank_comment = {

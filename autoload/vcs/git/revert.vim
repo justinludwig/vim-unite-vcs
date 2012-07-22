@@ -10,12 +10,28 @@ function! vcs#git#revert#do(args)
   let result = ''
   for file in files
     let status = vcs#vcs('status', [file])
-    if status[0].status =~ 'A\|D'
+    if status[0].status =~ 'A'
       let result = result . '\n' . substitute(vcs#system(join([
             \ 'git',
             \ 'reset',
             \ file,
             \ ])), '\r', '', 'g')
+      continue
+    endif
+    if status[0].status =~ 'D'
+      let result = result . '\n' . substitute(vcs#system(join([
+            \ 'git',
+            \ 'reset',
+            \ 'HEAD',
+            \ file,
+            \ ])), '\r', '', 'g')
+      if !filereadable(file)
+        let result = result . '\n' . substitute(vcs#system(join([
+              \ 'git',
+              \ 'checkout',
+              \ file,
+              \ ])), '\r', '', 'g')
+      endif
       continue
     endif
     if status[0].status =~ 'M'
