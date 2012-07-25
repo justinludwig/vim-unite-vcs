@@ -15,7 +15,7 @@ function! s:system(target)
         \ 'svn',
         \ 'log',
         \ '--stop-on-copy',
-        \ a:target
+        \ vcs#escape(a:target)
         \ ], ' '))
 endfunction
 

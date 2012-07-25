@@ -6,7 +6,7 @@ function! vcs#svn#add#do(args)
   return substitute(vcs#system(join([
         \ 'svn',
         \ 'add',
-        \ join(files, ' ')
+        \ join(vcs#escape(files), ' ')
         \ ])), '\r', '', 'g')
 endfunction
 

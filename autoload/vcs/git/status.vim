@@ -17,7 +17,7 @@ function! s:system(target)
         \ 'git',
         \ 'status',
         \ '--short',
-        \ a:target
+        \ vcs#escape(a:target)
         \ ], ' '))
   exec 'lcd ' . cwd
   return result

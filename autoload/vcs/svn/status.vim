@@ -14,7 +14,7 @@ function! s:system(target)
   return vcs#system(join([
         \ 'svn',
         \ 'status',
-        \ a:target
+        \ vcs#escape(a:target)
         \ ], ' '))
 endfunction
 

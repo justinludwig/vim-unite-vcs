@@ -16,7 +16,7 @@ function! s:system(target)
   let result = vcs#system(join([
         \ 'git',
         \ 'log',
-        \ a:target
+        \ vcs#escape(a:target)
         \ ], ' '))
   exec 'lcd ' . cwd
   return result
