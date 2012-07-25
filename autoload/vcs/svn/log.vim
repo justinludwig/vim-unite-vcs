@@ -14,6 +14,7 @@ function! s:system(target)
   return vcs#system(join([
         \ 'svn',
         \ 'log',
+        \ '--stop-on-copy',
         \ a:target
         \ ], ' '))
 endfunction
