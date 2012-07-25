@@ -11,7 +11,7 @@ function! vcs#git#delete#do(args)
         \ 'rm',
         \ '-f',
         \ '--cached',
-        \ join(files, ' ')
+        \ join(vcs#escape(files), ' ')
         \ ])), '\r', '', 'g')
   exec 'lcd ' . cwd
   return result

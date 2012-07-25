@@ -6,7 +6,7 @@ function! vcs#svn#delete#do(args)
   return substitute(vcs#system(join([
         \ 'svn',
         \ 'delete',
-        \ join(files, ' ')
+        \ join(vcs#escape(files), ' ')
         \ ])), '\r', '', 'g')
 endfunction
 

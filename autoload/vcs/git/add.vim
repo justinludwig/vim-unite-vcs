@@ -9,7 +9,7 @@ function! vcs#git#add#do(args)
   let result = substitute(vcs#system(join([
         \ 'git',
         \ 'add',
-        \ join(files, ' ')
+        \ join(vcs#escape(files), ' ')
         \ ])), '\r', '', 'g')
   exec 'lcd ' . cwd
   return result
