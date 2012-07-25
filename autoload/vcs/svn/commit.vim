@@ -9,7 +9,7 @@ function! vcs#svn#commit#do(args)
         \ '--editor-cmd',
         \ 'vim',
         \ 'commit',
-        \ join(files, ' ')
+        \ join(vcs#escape(files), ' ')
         \ ], ' ')
 endfunction
 

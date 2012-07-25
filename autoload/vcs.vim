@@ -49,8 +49,15 @@ function! vcs#target(args)
     let args = [a:args]
   endif
   let target = type(args) == type([]) ? args[0] : args
-  let target = escape(fnamemodify(target, ':p'), ' ')
-  return target
+  let target = fnamemodify(target, ':p')
+  return vcs#escape(target)
+endfunction
+
+function! vcs#escape(files)
+  if type(a:files) == type([])
+    return map(a:files, "escape(substitute(v:val, '\\', '/', 'g'), ' ')")
+  endif
+  return escape(substitute(a:files, '\\', '/', 'g'), ' ')
 endfunction
 
 function! vcs#system(...)

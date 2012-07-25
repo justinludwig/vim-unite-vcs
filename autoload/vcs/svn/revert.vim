@@ -6,7 +6,7 @@ function! vcs#svn#revert#do(args)
   return substitute(vcs#system(join([
         \ 'svn',
         \ 'revert',
-        \ join(files, ' ')
+        \ join(vcs#escape(files), ' ')
         \ ], ' ')), '\r', '', 'g')
 endfunction
 

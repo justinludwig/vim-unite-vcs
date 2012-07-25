@@ -10,7 +10,7 @@ function! vcs#svn#cat#do(args)
         \ 'cat',
         \ '--revision',
         \ revision,
-        \ target
+        \ vcs#escape(target)
         \ ], ' ')), '\r', '', 'g')
 endfunction
 

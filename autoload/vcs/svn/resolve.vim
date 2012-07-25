@@ -9,7 +9,7 @@ function! vcs#svn#resolve#do(args)
         \ 'resolve',
         \ '--accept',
         \ accept,
-        \ join(files, ' ')
+        \ join(vcs#escape(files), ' ')
         \ ], ' ')), '\r', '', 'g')
 endfunction
 
