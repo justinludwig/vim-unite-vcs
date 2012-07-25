@@ -79,6 +79,7 @@ function! s:kind.action_table.diff.func(candidates)
     call setline(1, lines[0])
     call append('.', lines[1:-1])
     exec 'file [REMOTE: HEAD] ' . candidate.action__path
+    setlocal nomodifiable
     diffthis
   endfor
 endfunction

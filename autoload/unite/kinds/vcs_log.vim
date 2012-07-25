@@ -60,6 +60,7 @@ function! s:kind.action_table.diff.func(candidates)
     call setline(1, lines[0])
     call append('.', lines[1:-1])
     exec 'file [' . candidate.action__revision . '] ' . candidate.action__path
+    setlocal nomodifiable
     diffthis
     return
   endif
@@ -73,6 +74,7 @@ function! s:kind.action_table.diff.func(candidates)
   call setline(1, lines[0])
   call append('.', lines[1:-1])
   exec 'file [REMOTE: ' . candidate.action__revision . '] ' . candidate.action__path
+  setlocal nomodifiable
   diffthis
 
   let candidate_ = a:candidates[1]
@@ -85,6 +87,7 @@ function! s:kind.action_table.diff.func(candidates)
   call setline(1, lines[0])
   call append('.', lines[1:-1])
   exec 'file [REMOTE: ' . candidate_.action__revision . '] ' . candidate_.action__path
+  setlocal nomodifiable
   diffthis
 endfunction
 
@@ -103,6 +106,7 @@ function! s:kind.action_table.diff_prev.func(candidates)
     call setline(1, lines[0])
     call append('.', lines[1:-1])
     exec 'file [REMOTE: ' . candidate.action__revision . '] ' . candidate.action__path
+    setlocal nomodifiable
     diffthis
 
     vnew
@@ -114,6 +118,7 @@ function! s:kind.action_table.diff_prev.func(candidates)
     call setline(1, lines[0])
     call append('.', lines[1:-1])
     exec 'file [REMOTE: ' . candidate.action__prev_revision . '] ' . candidate.action__path
+    setlocal nomodifiable
     diffthis
   endfor
 endfunction
