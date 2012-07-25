@@ -14,7 +14,7 @@ function! vcs#git#revert#do(args)
       let result = result . '\n' . substitute(vcs#system(join([
             \ 'git',
             \ 'reset',
-            \ file,
+            \ vcs#escape(file),
             \ ])), '\r', '', 'g')
       continue
     endif
@@ -23,13 +23,13 @@ function! vcs#git#revert#do(args)
             \ 'git',
             \ 'reset',
             \ 'HEAD',
-            \ file,
+            \ vcs#escape(file),
             \ ])), '\r', '', 'g')
       if !filereadable(file)
         let result = result . '\n' . substitute(vcs#system(join([
               \ 'git',
               \ 'checkout',
-              \ file,
+              \ vcs#escape(file),
               \ ])), '\r', '', 'g')
       endif
       continue
@@ -38,7 +38,7 @@ function! vcs#git#revert#do(args)
       let result = result . '\n' . substitute(vcs#system(join([
             \ 'git',
             \ 'checkout',
-            \ file,
+            \ vcs#escape(file),
             \ ])), '\r', '', 'g')
       continue
     endif

@@ -12,7 +12,7 @@ function! vcs#git#cat#do(args)
   let result = substitute(vcs#system(join([
         \ 'git',
         \ 'show',
-        \ revision . ":" . target[strlen(root) + 1:-1]
+        \ revision . ":" . vcs#escape(target[strlen(root) + 1:-1])
         \ ], ' ')), '\r', '', 'g')
   exec 'lcd ' . cwd
   return result
