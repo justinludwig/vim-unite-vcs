@@ -4,9 +4,9 @@ set cpo&vim
 function! vcs#svn#root#do(args)
   let target = fnamemodify(vcs#target(a:args), ':p:h')
   let prev = ''
-  while finddir('.svn', target . ';') != ''
+  while finddir('.svn', vcs#escape(target) . ';') != ''
     let prev = target
-    let target = fnamemodify(target, ':p:h:h')
+    let target = fnamemodify(vcs#escape(target), ':p:h:h')
   endwhile
   return prev
 endfunction
