@@ -4,7 +4,7 @@ set cpo&vim
 let s:detect_cache = {}
 
 function! vcs#detect(args)
-  let target = vcs#target(a:args)
+  let target = vcs#escape(vcs#target(a:args))
 
   if exists('s:detect_cache[target]')
     return s:detect_cache[target]
@@ -50,7 +50,7 @@ function! vcs#target(args)
   endif
   let target = type(args) == type([]) ? args[0] : args
   let target = fnamemodify(target, ':p')
-  return vcs#escape(target)
+  return target
 endfunction
 
 function! vcs#escape(files)

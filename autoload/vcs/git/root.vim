@@ -3,7 +3,7 @@ set cpo&vim
 
 function! vcs#git#root#do(args)
   let target = vcs#target(a:args)
-  return fnamemodify(finddir('.git', target . ';'), ':p:h:h')
+  return fnamemodify(finddir('.git', vcs#escape(target) . ';'), ':p:h:h')
 endfunction
 
 let &cpo = s:save_cpo
