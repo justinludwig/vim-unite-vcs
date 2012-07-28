@@ -6,12 +6,27 @@ function! vcs#git#commit#do(args)
 
   let cwd = getcwd()
   exec 'lcd ' . vcs#vcs('root', files)
-  exec join([
-        \ '!',
-        \ 'git',
-        \ 'commit',
-        \ join(vcs#escape(files), ' ')
-        \ ], ' ')
+  if match(vcs#system('echo $EDITOR'), '\w\+') != -1 || match(vcs#system('echo $GIT_EDITOR'), '\w\+') != -1
+    exec join([
+          \ '!',
+          \ 'git',
+          \ 'commit',
+          \ join(vcs#escape(files), ' ')
+          \ ], ' ')
+  else
+    echomsg "can't find $EDITOR or $GIT_EDITOR variable."
+    let msg = input('commit message: ')
+    if msg != ''
+      exec join([
+            \ '!',
+            \ 'git',
+            \ 'commit',
+            \ '-m',
+            \ '"' . msg . '"',
+            \ join(vcs#escape(files), ' ')
+            \ ], ' ')
+    endif
+  endif
   exec 'lcd ' . cwd
 endfunction
 
