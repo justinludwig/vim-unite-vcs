@@ -7,7 +7,7 @@ function! vcs#svn#delete#do(args)
         \ 'svn',
         \ 'delete',
         \ join(vcs#escape(files), ' ')
-        \ ])), '\r', '', 'g')
+        \ ], ' ')), '\r', '', 'g')
 endfunction
 
 let &cpo = s:save_cpo

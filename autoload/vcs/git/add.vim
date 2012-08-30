@@ -10,7 +10,7 @@ function! vcs#git#add#do(args)
         \ 'git',
         \ 'add',
         \ join(vcs#escape(files), ' ')
-        \ ])), '\r', '', 'g')
+        \ ], ' ')), '\r', '', 'g')
   exec 'lcd ' . cwd
   return result
 endfunction
