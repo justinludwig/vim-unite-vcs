@@ -15,7 +15,7 @@ function! vcs#git#revert#do(args)
             \ 'git',
             \ 'reset',
             \ vcs#escape(file),
-            \ ])), '\r', '', 'g')
+            \ ], ' ')), '\r', '', 'g')
       continue
     endif
     if status[0].status =~ 'D'
@@ -24,7 +24,7 @@ function! vcs#git#revert#do(args)
             \ 'reset',
             \ 'HEAD',
             \ vcs#escape(file),
-            \ ])), '\r', '', 'g')
+            \ ], ' ')), '\r', '', 'g')
       if !filereadable(file)
         let result = result . '\n' . substitute(vcs#system(join([
               \ 'git',
@@ -39,7 +39,7 @@ function! vcs#git#revert#do(args)
             \ 'git',
             \ 'checkout',
             \ vcs#escape(file),
-            \ ])), '\r', '', 'g')
+            \ ], ' ')), '\r', '', 'g')
       continue
     endif
   endfor

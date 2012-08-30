@@ -7,7 +7,7 @@ function! vcs#svn#add#do(args)
         \ 'svn',
         \ 'add',
         \ join(vcs#escape(files), ' ')
-        \ ])), '\r', '', 'g')
+        \ ], ' ')), '\r', '', 'g')
 endfunction
 
 let &cpo = s:save_cpo

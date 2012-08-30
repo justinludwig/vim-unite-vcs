@@ -12,7 +12,7 @@ function! vcs#git#delete#do(args)
         \ '-f',
         \ '--cached',
         \ join(vcs#escape(files), ' ')
-        \ ])), '\r', '', 'g')
+        \ ], ' ')), '\r', '', 'g')
   exec 'lcd ' . cwd
   return result
 endfunction
