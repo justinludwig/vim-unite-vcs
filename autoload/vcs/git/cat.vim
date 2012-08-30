@@ -1,4 +1,4 @@
-let s:save_cpo  = &cpo
+let s:save_cpo = &cpo
 set cpo&vim
 
 function! vcs#git#cat#do(args)

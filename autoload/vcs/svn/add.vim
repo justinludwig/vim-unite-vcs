@@ -1,4 +1,4 @@
-let s:save_cpo  = &cpo
+let s:save_cpo = &cpo
 set cpo&vim
 
 function! vcs#svn#add#do(args)

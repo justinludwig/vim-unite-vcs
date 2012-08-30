@@ -1,4 +1,4 @@
-let s:save_cpo  = &cpo
+let s:save_cpo = &cpo
 set cpo&vim
 
 function! unite#sources#vcs_file_rec#define()
@@ -23,7 +23,7 @@ function! s:source.gather_candidates(args, context)
     let path = a:context.source__path
   endif
 
-  let statuses  = vcs#vcs('status', [path])
+  let statuses = vcs#vcs('status', [path])
   let status_map = {}
   for status in statuses
     let status_map[status.path] = status.status
