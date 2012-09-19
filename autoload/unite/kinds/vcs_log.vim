@@ -105,7 +105,7 @@ function! s:kind.action_table.diff_prev.func(candidates)
     let lines = split(vcs#vcs('cat', [candidate.action__path, candidate.action__revision]), '\n')
     call setline(1, lines[0])
     call append('.', lines[1:-1])
-    exec 'file [REMOTE: ' . candidate.action__revision . '] ' . candidate.action__path
+    exec 'file [REMOTE1: ' . candidate.action__revision . '] ' . candidate.action__path
     setlocal nomodifiable
     diffthis
 
@@ -117,7 +117,7 @@ function! s:kind.action_table.diff_prev.func(candidates)
     let lines = split(vcs#vcs('cat', [candidate.action__path, candidate.action__prev_revision]), '\n')
     call setline(1, lines[0])
     call append('.', lines[1:-1])
-    exec 'file [REMOTE: ' . candidate.action__prev_revision . '] ' . candidate.action__path
+    exec 'file [REMOTE2: ' . candidate.action__prev_revision . '] ' . candidate.action__path
     setlocal nomodifiable
     diffthis
   endfor
