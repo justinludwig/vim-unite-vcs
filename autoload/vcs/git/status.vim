@@ -33,11 +33,19 @@ endfunction
 
 function! s:parse(target, list)
   let root = vcs#vcs('root', [a:target])
-  return map(a:list, "{
-        \ 'path': root . '/' . v:val[3:-1],
+  return map(a:list, "s:format(root, {
+        \ 'path': v:val[3:-1],
         \ 'status': v:val[0:2],
         \ 'line': v:val
-        \ }")
+        \ })")
+endfunction
+
+function! s:format(root, status)
+  if a:status.status =~# 'R'
+    let a:status.path = substitute(split(a:status.path, '->')[1], '^\s*\|\s*$', '', 'g')
+  endif
+  let a:status.path = a:root . '/' . a:status.path
+  return a:status
 endfunction
 
 let &cpo = s:save_cpo

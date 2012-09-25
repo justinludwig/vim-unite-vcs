@@ -1,8 +1,8 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite#kinds#vcs_file#define()
-  return s:kind
+function! unite#kinds#vcs#file#define()
+  return [s:kind]
 endfunction
 
 let s:kind = {
@@ -13,7 +13,7 @@ let s:kind = {
       \ }
 
 let s:kind.action_table.log = {
-      \ 'description': 'display candidate log.',
+      \ 'description': 'display vcs log.',
       \ 'is_selectable': 1
       \ }
 function! s:kind.action_table.log.func(candidates)
