@@ -11,6 +11,7 @@ function! vcs#git#commit#do(args)
           \ '!',
           \ 'git',
           \ 'commit',
+          \ '--include',
           \ join(vcs#escape(files), ' ')
           \ ], ' ')
   else
@@ -21,6 +22,7 @@ function! vcs#git#commit#do(args)
             \ '!',
             \ 'git',
             \ 'commit',
+            \ '--include',
             \ '-m',
             \ '"' . msg . '"',
             \ join(vcs#escape(files), ' ')
