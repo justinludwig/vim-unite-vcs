@@ -28,9 +28,10 @@ function! s:source.gather_candidates(args, context)
 
   let logs = vcs#vcs('log', [path])
   let revisionlen = max(map(copy(logs), "strlen(v:val.revision)"))
+  let datelen = max(map(copy(logs), "strlen(split(v:val.date, ' ')[0])"))
   let authorlen = max(map(copy(logs), "strlen(split(v:val.author, ' ')[0])"))
   return map(logs, "{
-        \ 'word': s:padding(v:val.revision, revisionlen) . ' | '. s:padding(split(v:val.author, ' ')[0], authorlen) . ' | ' . v:val.message,
+        \ 'word': s:padding(v:val.revision, revisionlen) . ' | '. s:padding(v:val.date, datelen) . ' | '. s:padding(v:val.author, authorlen) . ' | ' . v:val.message,
         \ 'action__path': v:val.path,
         \ 'action__revision': v:val.revision,
         \ 'action__prev_revision': v:val.prev_revision,
