@@ -34,7 +34,6 @@ function! s:parse(target, list)
         \ "revision": v:val[0],
         \ "prev_revision": v:val[1],
         \ "author": v:val[2],
-        \ "email": v:val[3],
         \ "date": v:val[4],
         \ "message": v:val[5],
         \ "path": a:target

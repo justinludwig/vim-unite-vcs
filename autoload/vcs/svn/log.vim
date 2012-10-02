@@ -24,14 +24,20 @@ function! s:str2list(str)
 endfunction
 
 function! s:extract(list)
-  return filter(map(a:list, "split(v:val, '\n')"), "len(v:val) > 0")
+  let list = filter(map(a:list, "filter(split(v:val, '\n'), 'strlen(v:val)')"), "len(v:val)")
+  let list = map(list, "[split(v:val[0], '|'), v:val[1]]")
+  let list = map(list, "[map(v:val[0], \"substitute(v:val, '^\\\\s*\\\\|\\\\s*$', '', 'g')\"), v:val[1]]")
+  let list = filter(list, "exists('v:val[0][0]') && exists('v:val[0][1]') && exists('v:val[0][2]')")
+  let list = map(list, "exists('v:val[1]') ? [v:val[0], v:val[1]] : [v:val[0], '']")
+  return list
 endfunction
 
 function! s:parse(target, list)
   let logs = map(a:list, "{
-        \ 'revision': substitute(split(v:val[0], '|')[0], '[^[:digit:]]', '', 'g'),
-        \ 'author': split(v:val[0], '|')[1],
-        \ 'message': v:val[2],
+        \ 'revision': join(split(v:val[0][0], 'r')),
+        \ 'author': v:val[0][1],
+        \ 'date': join(split(v:val[0][2], ' ')[0:1], ' '),
+        \ 'message': v:val[1],
         \ 'path': a:target
         \ }")
 
