@@ -3,6 +3,7 @@ set cpo&vim
 
 function! vcs#svn#commit#do(args)
   let files = type(a:args) == type([]) ? a:args : [a:args]
+  " TODO: collect windows.
   exec join([
         \ '!',
         \ 'svn',
