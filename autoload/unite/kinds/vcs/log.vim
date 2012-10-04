@@ -55,49 +55,21 @@ function! s:kind.action_table.diff.func(candidates)
     return
   endif
 
-  " for diff original.
-  let candidate = a:candidates[0]
   if len(a:candidates) == 1
-    exec 'tabedit ' . candidate.action__path
-    diffthis
-    vnew
-    set bufhidden=delete
-    set nobuflisted
-    set buftype=nofile
-    set noswapfile
-    let lines = split(vcs#vcs('cat', [candidate.action__path, candidate.action__revision]), '\n')
-    call setline(1, lines[0])
-    call append('.', lines[1:-1])
-    exec 'file [' . candidate.action__revision . '] ' . candidate.action__path
-    setlocal nomodifiable
-    diffthis
+    call vcs#diff_file_with_string(a:candidates[0].action__path, {
+          \ 'name': '[REMOTE]' . a:candidates[0].action__path,
+          \ 'string': vcs#vcs('cat', [a:candidates[0].action__path, a:candidates[0].action__revision])
+          \ })
     return
+  else
+    call vcs#diff_string_with_string({
+          \ 'name': '[REMOTE:' . a:candidates[0].action__revision . ']' . a:candidates[0].action__path,
+          \ 'string': vcs#vcs('cat', [a:candidates[0].action__path, a:candidates[0].action__revision])
+          \ }, {
+          \ 'name': '[REMOTE:' . a:candidates[1].action__revision . ']' . a:candidates[1].action__path,
+          \ 'string': vcs#vcs('cat', [a:candidates[1].action__path, a:candidates[1].action__revision])
+          \ }
   endif
-
-  tabnew
-  set bufhidden=delete
-  set nobuflisted
-  set buftype=nofile
-  set noswapfile
-  let lines = split(vcs#vcs('cat', [candidate.action__path, candidate.action__revision]), '\n')
-  call setline(1, lines[0])
-  call append('.', lines[1:-1])
-  exec 'file [REMOTE: ' . candidate.action__revision . '] ' . candidate.action__path
-  setlocal nomodifiable
-  diffthis
-
-  let candidate_ = a:candidates[1]
-  vnew
-  set bufhidden=delete
-  set nobuflisted
-  set buftype=nofile
-  set noswapfile
-  let lines = split(vcs#vcs('cat', [candidate_.action__path, candidate_.action__revision]), '\n')
-  call setline(1, lines[0])
-  call append('.', lines[1:-1])
-  exec 'file [REMOTE: ' . candidate_.action__revision . '] ' . candidate_.action__path
-  setlocal nomodifiable
-  diffthis
 endfunction
 
 let s:kind.action_table.diff_prev = {
@@ -106,29 +78,13 @@ let s:kind.action_table.diff_prev = {
       \ }
 function! s:kind.action_table.diff_prev.func(candidates)
   for candidate in a:candidates
-    tabnew
-    set bufhidden=delete
-    set nobuflisted
-    set buftype=nofile
-    set noswapfile
-    let lines = split(vcs#vcs('cat', [candidate.action__path, candidate.action__revision]), '\n')
-    call setline(1, lines[0])
-    call append('.', lines[1:-1])
-    exec 'file [REMOTE1: ' . candidate.action__revision . '] ' . candidate.action__path
-    setlocal nomodifiable
-    diffthis
-
-    vnew
-    set bufhidden=delete
-    set nobuflisted
-    set buftype=nofile
-    set noswapfile
-    let lines = split(vcs#vcs('cat', [candidate.action__path, candidate.action__prev_revision]), '\n')
-    call setline(1, lines[0])
-    call append('.', lines[1:-1])
-    exec 'file [REMOTE2: ' . candidate.action__prev_revision . '] ' . candidate.action__path
-    setlocal nomodifiable
-    diffthis
+    call vcs#diff_string_with_string({
+          \ 'name': '[REMOTE:' . candidate.action__revision . ']' . candidate.action__path,
+          \ 'string': vcs#vcs('cat', [candidate.action__path, candidate.action__revision])
+          \ }, {
+          \ 'name': '[REMOTE:' . candidate.action__prev_revision . ']' . candidate.action__path,
+          \ 'string': vcs#vcs('cat', [candidate.action__path, candidate.action__prev_revision])
+          \ }
   endfor
 endfunction
 

@@ -68,19 +68,9 @@ let s:kind.action_table.diff = {
       \ }
 function! s:kind.action_table.diff.func(candidates)
   for candidate in a:candidates
-    exec 'tabedit ' . candidate.action__path
-    diffthis
-    vnew
-    set bufhidden=delete
-    set nobuflisted
-    set buftype=nofile
-    set noswapfile
-    let lines = split(vcs#vcs('cat', [candidate.action__path]), '\n')
-    call setline(1, lines[0])
-    call append('.', lines[1:-1])
-    exec 'file [REMOTE: HEAD] ' . candidate.action__path
-    setlocal nomodifiable
-    diffthis
+    call vcs#diff_file_with_string(candidate.action__path, {
+          \ 'name': '[REMOTE]' . candidate.action__path,
+          \ 'string': vcs#vcs('cat', [candidate.action__path]) })
   endfor
 endfunction
 

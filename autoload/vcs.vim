@@ -64,6 +64,31 @@ function! vcs#system(...)
   return exists('g:loaded_vimproc') ? call('vimproc#system', a:000) : call('system', a:000)
 endfunction
 
+function! vcs#diff_file_with_string(path, arg)
+  exec 'tabedit ' . a:path
+  diffthis
+
+  vnew
+  put!=a:arg.string
+  setlocal bufhidden=delete buftype=nofile nobuflisted noswapfile nomodifiable
+  execute 'file ' . a:arg.name
+  diffthis
+endfunction
+
+function! vcs#diff_string_with_string(arg1, arg2)
+  tabnew
+  put!=a:arg1.string
+  setlocal bufhidden=delete buftype=nofile nobuflisted noswapfile nomodifiable
+  execute 'file ' . a:arg1.name
+  diffthis
+
+  vnew
+  put!=a:arg2.string
+  setlocal bufhidden=delete buftype=nofile nobuflisted noswapfile nomodifiable
+  execute 'file ' . a:arg2.name
+  diffthis
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
