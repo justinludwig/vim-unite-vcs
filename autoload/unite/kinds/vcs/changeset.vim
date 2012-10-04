@@ -19,7 +19,7 @@ let s:kind.action_table.diff = {
 function! s:kind.action_table.diff.func(candidates)
   for candidate in a:candidates
     call vcs#diff_file_with_string(candidate.action__path, {
-          \ 'name': '[REMOTE]' . candidate.action__path,
+          \ 'name': '[REMOTE] ' . candidate.action__path,
           \ 'string': vcs#vcs('cat', [candidate.action__path, candidate.action__revision])
           \ })
   endfor
@@ -32,12 +32,12 @@ let s:kind.action_table.diff_prev = {
 function! s:kind.action_table.diff_prev.func(candidates)
   for candidate in a:candidates
     call vcs#diff_string_with_string({
-          \ 'name': '[REMOTE:' . candidate.action__revision . ']' . candidate.action__path,
+          \ 'name': '[REMOTE:' . candidate.action__revision . '] ' . candidate.action__path,
           \ 'string': vcs#vcs('cat', [candidate.action__path, candidate.action__revision])
           \ }, {
-          \ 'name': '[REMOTE:' . candidate.action__prev_revision . ']' . candidate.action__path,
+          \ 'name': '[REMOTE:' . candidate.action__prev_revision . '] ' . candidate.action__path,
           \ 'string': vcs#vcs('cat', [candidate.action__path, candidate.action__prev_revision])
-          \ }
+          \ })
   endfor
 endfunction
 

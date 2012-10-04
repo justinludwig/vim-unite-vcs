@@ -12,6 +12,18 @@ let s:kind = {
       \ 'parents': ['file']
       \ }
 
+let s:kind.action_table.diff = {
+      \ 'is_listed': 0,
+      \ }
+function! s:kind.action_table.diff.func(candidates)
+endfunction
+
+let s:kind.action_table.dirdiff = {
+      \ 'is_listed': 0,
+      \ }
+function! s:kind.action_table.dirdiff.func(candidates)
+endfunction
+
 let s:kind.action_table.log = {
       \ 'description': 'display vcs log.',
       \ 'is_selectable': 1
