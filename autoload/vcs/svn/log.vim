@@ -20,7 +20,7 @@ function! s:system(target)
 endfunction
 
 function! s:str2list(str)
-  return split(a:str, '------------------------------------------------------------------------')
+  return split(a:str, g:vcs#svn#log_separator)
 endfunction
 
 function! s:extract(list)
