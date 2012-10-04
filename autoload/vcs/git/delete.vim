@@ -5,7 +5,7 @@ function! vcs#git#delete#do(args)
   let files = type(a:args) == type([]) ? a:args : [a:args]
 
   let cwd = getcwd()
-  exec 'lcd ' . vcs#vcs('root', files)
+  exec 'cd ' . vcs#vcs('root', files)
   let result = substitute(vcs#system(join([
         \ 'git',
         \ 'rm',
@@ -13,7 +13,7 @@ function! vcs#git#delete#do(args)
         \ '--cached',
         \ join(vcs#escape(files), ' ')
         \ ], ' ')), '\r', '', 'g')
-  exec 'lcd ' . cwd
+  exec 'cd ' . cwd
   return result
 endfunction
 

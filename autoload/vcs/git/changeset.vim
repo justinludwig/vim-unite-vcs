@@ -12,7 +12,7 @@ endfunction
 
 function! s:system(target, revision)
   let cwd = getcwd()
-  exec 'lcd ' . vcs#vcs('root', [a:target])
+  exec 'cd ' . vcs#vcs('root', [a:target])
   let result = vcs#system(join([
         \ 'git',
         \ 'log',
@@ -21,7 +21,7 @@ function! s:system(target, revision)
         \ '-1',
         \ a:revision,
         \ ], ' '))
-  exec 'lcd ' . cwd
+  exec 'cd ' . cwd
   return result
 endfunction
 

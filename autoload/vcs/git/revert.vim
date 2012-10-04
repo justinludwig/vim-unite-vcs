@@ -5,7 +5,7 @@ function! vcs#git#revert#do(args)
   let files = type(a:args) == type([]) ? a:args : [a:args]
 
   let cwd = getcwd()
-  exec 'lcd ' . vcs#vcs('root', files)
+  exec 'cd ' . vcs#vcs('root', files)
 
   let result = ''
   for file in files
@@ -44,7 +44,7 @@ function! vcs#git#revert#do(args)
     endif
   endfor
 
-  exec 'lcd ' . cwd
+  exec 'cd ' . cwd
   return result
 endfunction
 

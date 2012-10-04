@@ -6,7 +6,7 @@ function! vcs#git#commit#do(args)
 
   " TODO: collect windows.
   let cwd = getcwd()
-  exec 'lcd ' . vcs#vcs('root', files)
+  exec 'cd ' . vcs#vcs('root', files)
   exec join([
         \ '!',
         \ 'export EDITOR=vim;',
@@ -15,7 +15,7 @@ function! vcs#git#commit#do(args)
         \ '--include',
         \ join(vcs#escape(files), ' ')
         \ ], ' ')
-  exec 'lcd ' . cwd
+  exec 'cd ' . cwd
 endfunction
 
 let &cpo = s:save_cpo

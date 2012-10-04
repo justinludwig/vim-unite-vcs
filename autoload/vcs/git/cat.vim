@@ -7,14 +7,14 @@ function! vcs#git#cat#do(args)
   let root = vcs#vcs('root', [target])
 
   let cwd = getcwd()
-  exec 'lcd '. root
+  exec 'cd '. root
 
   let result = substitute(vcs#system(join([
         \ 'git',
         \ 'show',
         \ revision . ":" . vcs#escape(target[strlen(root) + 1:-1])
         \ ], ' ')), '\r', '', 'g')
-  exec 'lcd ' . cwd
+  exec 'cd ' . cwd
   return result
 endfunction
 
