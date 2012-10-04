@@ -1,9 +1,6 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-" HASH, PREV_HASH, AUTHOR_NAME, AUTHOR_EMAIL, AUTHOR_DATE, SUBJECT
-let s:format = '%H%x09%P%x09%an%x09%ae%x09%ai%x09%s'
-
 function! vcs#git#log#do(args)
   let target = vcs#target(a:args)
   let str = s:system(target)
@@ -18,7 +15,7 @@ function! s:system(target)
   let result = vcs#system(join([
         \ 'git',
         \ 'log',
-        \ '--pretty=format:"' . s:format . '"',
+        \ '--pretty=format:"' . g:vcs#git#log_format . '"',
         \ vcs#escape(a:target)
         \ ], ' '))
   exec 'lcd ' . cwd

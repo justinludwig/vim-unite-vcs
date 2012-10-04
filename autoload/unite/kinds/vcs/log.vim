@@ -7,7 +7,7 @@ endfunction
 
 let s:kind = {
       \ 'name': 'vcs/log',
-      \ 'default_action': 'diff',
+      \ 'default_action': 'changeset',
       \ 'action_table': {},
       \ 'parents': ['vcs/file']
       \ }
@@ -34,6 +34,15 @@ function! s:kind.action_table.yank_revision.func(candidates)
   if has('clipboard')
     let @* = @"
   endif
+endfunction
+
+let s:kind.action_table.changeset = {
+      \ 'description': 'display changeset.',
+      \ 'is_selectable': 0,
+      \ }
+function! s:kind.action_table.changeset.func(candidates)
+  let candidate = type(a:candidates) == type([]) ? a:candidates[0] : a:candidates
+  call unite#start([['vcs/changeset', candidate.action__path, candidate.action__revision]])
 endfunction
 
 let s:kind.action_table.diff = {

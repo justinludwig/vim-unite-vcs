@@ -6,9 +6,8 @@ function! vcs#git#changeset#do(args)
   let revision = len(a:args) == 2 ? a:args[1] : 'HEAD'
   let str = s:system(target, revision)
   let list = s:str2list(str)
-  let list = s:extract(list)
-  let list = s:parse(target, revision, list)
-  return list
+  let changeset = s:parse(target, revision, list)
+  return changeset
 endfunction
 
 function! s:system(target, revision)
@@ -18,6 +17,7 @@ function! s:system(target, revision)
         \ 'git',
         \ 'log',
         \ '--name-status',
+        \ '--pretty=format:"' . g:vcs#git#log_format . '"',
         \ '-1',
         \ a:revision,
         \ ], ' '))
@@ -26,32 +26,24 @@ function! s:system(target, revision)
 endfunction
 
 function! s:str2list(str)
-    return split(a:str, 'commit ')
-endfunction
-
-function! s:extract(list)
-  let list = map(a:list, 'reverse(split(v:val, "\n"))')[0]
-
-  let result = []
-  for val in list
-    if val == ''
-      break
-    endif
-    call add(result, val)
-  endfor
-  return result
+  let list = split(a:str, "\n")
+  let list[0] = split(list[0], '\t')
+  return list
 endfunction
 
 function! s:parse(target, revision, list)
-  let logs = map(a:list, "{
-        \ 'status': substitute(v:val, '\\s.*$', '', 'g'),
-        \ 'path': substitute(v:val, '^.*\\s', '', 'g'),
-        \ 'revision': a:revision
-        \ }")
-  return logs
+  return {
+        \ 'revision': a:list[0][0],
+        \ 'prev_revision': a:list[0][1],
+        \ 'author': a:list[0][2],
+        \ 'date': join(split(a:list[0][4], ' ')[0:1], ' '),
+        \ 'message': a:list[0][5],
+        \ 'changesets': map(a:list[1:], "{
+          \ 'path': substitute(v:val, '^.*\\s', '', 'g'),
+          \ 'status': substitute(v:val, '\\s.*$', '', 'g'),
+          \ }")
+        \ }
 endfunction
-
-echo PP(vcs#git#changeset#do(['~/.vim/bundle/vim-unite-vcs', 'HEAD^^^']))
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
