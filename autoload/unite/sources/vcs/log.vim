@@ -32,6 +32,7 @@ function! s:source.gather_candidates(args, context)
   let authorlen = max(map(copy(logs), "strlen(split(v:val.author, ' ')[0])"))
   return map(logs, "{
         \ 'word': s:padding(v:val.revision, revisionlen) . ' | '. s:padding(v:val.date, datelen) . ' | '. s:padding(v:val.author, authorlen) . ' | ' . v:val.message,
+        \ 'source__path': path,
         \ 'action__path': v:val.path,
         \ 'action__revision': v:val.revision,
         \ 'action__prev_revision': v:val.prev_revision,
