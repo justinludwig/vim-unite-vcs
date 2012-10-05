@@ -2,30 +2,27 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! vcs#git#revert#do(args)
-  let cwd = getcwd()
-  exec 'cd ' . vcs#vcs('root', a:args)
-
   let files = type(a:args) == type([]) ? a:args : [a:args]
   let result = ''
   for file in files
     let status = vcs#vcs('status', [file])
     if status[0].status =~ 'A'
-      let result = result . '\n' . substitute(vcs#system(join([
+      let result = result . '\n' . substitute(vcs#system([
             \ 'git',
             \ 'reset',
             \ vcs#escape(file),
-            \ ], ' ')), '\r', '', 'g')
+            \ ]), '\r', '', 'g')
       continue
     endif
     if status[0].status =~ 'D'
-      let result = result . '\n' . substitute(vcs#system(join([
+      let result = result . '\n' . substitute(vcs#system([
             \ 'git',
             \ 'reset',
             \ 'HEAD',
             \ vcs#escape(file),
-            \ ], ' ')), '\r', '', 'g')
+            \ ]), '\r', '', 'g')
       if !filereadable(file)
-        let result = result . '\n' . substitute(vcs#system(join([
+        let result = result . '\n' . substitute(vcs#system([
               \ 'git',
               \ 'checkout',
               \ vcs#escape(file),
@@ -34,16 +31,14 @@ function! vcs#git#revert#do(args)
       continue
     endif
     if status[0].status =~ 'M'
-      let result = result . '\n' . substitute(vcs#system(join([
+      let result = result . '\n' . substitute(vcs#system([
             \ 'git',
             \ 'checkout',
             \ vcs#escape(file),
-            \ ], ' ')), '\r', '', 'g')
+            \ ]), '\r', '', 'g')
       continue
     endif
   endfor
-
-  exec 'cd ' . cwd
   return result
 endfunction
 

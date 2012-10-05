@@ -2,25 +2,19 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! vcs#git#log#do(args)
-  let cwd = getcwd()
-  exec 'cd ' . vcs#vcs('root', a:args)
-
   let target = vcs#target(a:args)
   let str = s:system(target)
   let list = s:str2list(str)
-  let result = s:parse(target, list)
-
-  exec 'cd ' . cwd
-  return result
+  return s:parse(target, list)
 endfunction
 
 function! s:system(target)
-  return vcs#system(join([
+  return vcs#system([
         \ 'git',
         \ 'log',
         \ '--pretty=format:"' . g:vcs#git#log_format . '"',
         \ vcs#escape(a:target)
-        \ ], ' '))
+        \ ])
 endfunction
 
 function! s:str2list(str)

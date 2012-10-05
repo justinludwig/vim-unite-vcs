@@ -22,15 +22,26 @@ function! vcs#detect(args)
 endfunction
 
 function! vcs#vcs(command, args)
+  " detect vcs type.
   let target = vcs#target(a:args)
   let type = vcs#detect(target)
   if type == ''
     echoerr 'vcs can not detected: ' . target
     return
   endif
-  return {'vcs#' . type . '#' . a:command . '#do'}(a:args)
+
+  " move current directory & do command.
+  let root = {'vcs#' . type . '#root#do'}(a:args)
+  let save = getcwd()
+
+  call vcs#execute(['cd', root])
+  let result = {'vcs#' . type . '#' . a:command . '#do'}(a:args)
+  call vcs#execute(['cd', save])
+
+  return result
 endfunction
 
+" TODO: refactor.
 function! vcs#target(args)
   if type(a:args) == type([])
     let args = a:args
@@ -54,6 +65,10 @@ function! vcs#target(args)
   return target
 endfunction
 
+function! vcs#execute(list)
+  execute join(a:list, ' ')
+endfunction
+
 function! vcs#escape(files)
   if type(a:files) == type([])
     return map(a:files, "escape(substitute(v:val, '\\', '/', 'g'), ' ')")
@@ -61,18 +76,18 @@ function! vcs#escape(files)
   return escape(substitute(a:files, '\\', '/', 'g'), ' ')
 endfunction
 
-function! vcs#system(...)
-  return exists('g:loaded_vimproc') ? call('vimproc#system', a:000) : call('system', a:000)
+function! vcs#system(list)
+  return exists('g:loaded_vimproc') ? call('vimproc#system', [join(a:list, ' ')]) : call('system', [join(a:list, ' ')])
 endfunction
 
 function! vcs#diff_file_with_string(path, arg)
-  exec 'tabedit ' . a:path
+  call vcs#execute(['tabedit', a:path])
   diffthis
 
   vnew
   put!=a:arg.string
   setlocal bufhidden=delete buftype=nofile nobuflisted noswapfile nomodifiable
-  execute 'file ' . a:arg.name
+  call vcs#execute(['file', a:arg.name])
   diffthis
 endfunction
 
@@ -80,13 +95,13 @@ function! vcs#diff_string_with_string(arg1, arg2)
   tabnew
   put!=a:arg1.string
   setlocal bufhidden=delete buftype=nofile nobuflisted noswapfile nomodifiable
-  execute 'file ' . a:arg1.name
+  call vcs#execute(['file', a:arg1.name])
   diffthis
 
   vnew
   put!=a:arg2.string
   setlocal bufhidden=delete buftype=nofile nobuflisted noswapfile nomodifiable
-  execute 'file ' . a:arg2.name
+  call vcs#execute(['file', a:arg2.name])
   diffthis
 endfunction
 

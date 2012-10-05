@@ -2,28 +2,22 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! vcs#git#changeset#do(args)
-  let cwd = getcwd()
-  exec 'cd '. vcs#vcs('root', [a:args])
-
   let target = vcs#target(a:args)
   let revision = len(a:args) == 2 ? a:args[1] : 'HEAD'
   let str = s:system(target, revision)
   let list = s:str2list(str)
-  let result = s:parse(target, revision, list)
-
-  exec 'cd ' . cwd
-  return result
+  return s:parse(target, revision, list)
 endfunction
 
 function! s:system(target, revision)
-  return vcs#system(join([
+  return vcs#system([
         \ 'git',
         \ 'log',
         \ '--name-status',
         \ '--pretty=format:"' . g:vcs#git#log_format . '"',
         \ '-1',
         \ a:revision,
-        \ ], ' '))
+        \ ])
 endfunction
 
 function! s:str2list(str)
