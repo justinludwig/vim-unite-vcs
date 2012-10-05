@@ -26,11 +26,12 @@ endfunction
 
 let s:kind.action_table.log = {
       \ 'description': 'display vcs log.',
-      \ 'is_selectable': 1
+      \ 'is_selectable': 1,
+      \ 'is_quit': 0
       \ }
 function! s:kind.action_table.log.func(candidates)
   let candidate = type(a:candidates) == type([]) ? a:candidates[0] : a:candidates
-  call unite#start([['vcs/log', candidate.action__path]])
+  call unite#start_temporary([['vcs/log', fnamemodify(candidate.action__path, ':p:h')]])
 endfunction
 
 let &cpo = s:save_cpo

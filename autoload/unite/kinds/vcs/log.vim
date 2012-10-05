@@ -39,10 +39,11 @@ endfunction
 let s:kind.action_table.changeset = {
       \ 'description': 'display changeset.',
       \ 'is_selectable': 0,
+      \ 'is_quit': 0
       \ }
 function! s:kind.action_table.changeset.func(candidates)
   let candidate = type(a:candidates) == type([]) ? a:candidates[0] : a:candidates
-  call unite#start([['vcs/changeset', candidate.action__path, candidate.action__revision]])
+  call unite#start_temporary([['vcs/changeset', fnamemodify(candidate.action__path, ':p:h'), candidate.action__revision]])
 endfunction
 
 let &cpo = s:save_cpo

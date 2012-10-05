@@ -2,12 +2,17 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! vcs#svn#log#do(args)
+  let cwd = getcwd()
+  exec 'cd ' . vcs#vcs('root', a:args)
+
   let target = vcs#target(a:args)
   let str = s:system(target)
   let list = s:str2list(str)
   let list = s:extract(list)
-  let list = s:parse(target, list)
-  return list
+  let result = s:parse(target, list)
+
+  exec 'cd ' . cwd
+  return result
 endfunction
 
 function! s:system(target)

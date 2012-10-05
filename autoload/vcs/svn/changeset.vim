@@ -2,12 +2,18 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! vcs#svn#changeset#do(args)
+  let cwd = getcwd()
+  exec 'cd ' . vcs#vcs('root', a:args)
+
   let target = vcs#target(a:args)
   let revision = len(a:args) == 2 ? a:args[1] : 'HEAD'
   let str = s:system(target, revision)
   let list = s:str2list(str)
   let list = s:extract(list)
-  return s:parse(target, list, revision)
+  let result = s:parse(target, list, revision)
+
+  exec 'cd ' . cwd
+  return result
 endfunction
 
 function! s:system(target, revision)
@@ -17,7 +23,7 @@ function! s:system(target, revision)
         \ '--limit 2',
         \ '--verbose',
         \ '--stop-on-copy',
-        \ vcs#escape(a:target) . '@' . a:revision
+        \ vcs#escape(vcs#vcs('root', [a:target])) . '@' . a:revision
         \ ], ' '))
 endfunction
 
@@ -61,12 +67,13 @@ function! s:parse(target, list, revision)
 endfunction
 
 function! s:repository2working(target, path)
+  let root = vcs#vcs('root', [a:target])
   let list = map(split(vcs#system(join([
         \ 'svn',
         \ 'info',
-        \ a:target
+        \ vcs#escape(vcs#vcs('root', [a:target]))
         \ ], ' ')), "\n")[2:3], "join(split(v:val, ' ')[1:-1], '')")
-  return a:path[len(list[0]) - len(list[1]) + 1:-1]
+  return root . '/' . a:path[len(list[0]) - len(list[1]) + 1:-1]
 endfunction
 
 let &cpo = s:save_cpo

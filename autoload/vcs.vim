@@ -48,7 +48,8 @@ function! vcs#target(args)
   else
     let args = [a:args]
   endif
-  let target = type(args) == type([]) ? args[0] : args
+  let _ = type(args) == type([]) ? args[0] : args
+  let target = type(_) == type([]) ? _[0] : _
   let target = fnamemodify(target, ':p')
   return target
 endfunction

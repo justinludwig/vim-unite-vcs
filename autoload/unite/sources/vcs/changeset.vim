@@ -35,7 +35,7 @@ function! s:source.gather_candidates(args, context)
 
   let statuslen = max(map(copy(changeset.changesets), "strlen(v:val.status)"))
   return map(changeset.changesets, "{
-        \ 'word': s:padding(v:val.status, statuslen) . ' | ' . v:val.path,
+        \ 'word': s:padding(v:val.status, statuslen) . ' | ' . v:val.path[strlen(vcs#vcs('root', [v:val.path])) + 1:-1],
         \ 'action__revision': changeset.revision,
         \ 'action__prev_revision': changeset.prev_revision,
         \ 'action__author': changeset.author,

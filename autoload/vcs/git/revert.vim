@@ -2,11 +2,10 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! vcs#git#revert#do(args)
-  let files = type(a:args) == type([]) ? a:args : [a:args]
-
   let cwd = getcwd()
-  exec 'cd ' . vcs#vcs('root', files)
+  exec 'cd ' . vcs#vcs('root', a:args)
 
+  let files = type(a:args) == type([]) ? a:args : [a:args]
   let result = ''
   for file in files
     let status = vcs#vcs('status', [file])
