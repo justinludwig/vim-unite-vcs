@@ -35,7 +35,11 @@ function! vcs#vcs(command, args)
   let save = getcwd()
 
   call vcs#execute(['cd', root])
-  let result = {'vcs#' . type . '#' . a:command . '#do'}(a:args)
+  try
+    let result = {'vcs#' . type . '#' . a:command . '#do'}(a:args)
+  catch
+    let result = ''
+  endtry
   call vcs#execute(['cd', save])
 
   return result
