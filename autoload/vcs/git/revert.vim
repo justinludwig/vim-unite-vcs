@@ -7,35 +7,35 @@ function! vcs#git#revert#do(args)
   for file in files
     let status = vcs#vcs('status', [file])
     if status[0].status =~ 'A'
-      let result = result . '\n' . substitute(vcs#system([
+      let result = result . vcs#system([
             \ 'git',
             \ 'reset',
             \ vcs#escape(file),
-            \ ]), '\r', '', 'g')
+            \ ])
       continue
     endif
     if status[0].status =~ 'D'
-      let result = result . '\n' . substitute(vcs#system([
+      let result = result . vcs#system([
             \ 'git',
             \ 'reset',
             \ 'HEAD',
             \ vcs#escape(file),
-            \ ]), '\r', '', 'g')
+            \ ])
       if !filereadable(file)
-        let result = result . '\n' . substitute(vcs#system([
+        let result = result . vcs#system([
               \ 'git',
               \ 'checkout',
               \ vcs#escape(file),
-              \ ])), '\r', '', 'g')
+              \ ]))
       endif
       continue
     endif
     if status[0].status =~ 'M'
-      let result = result . '\n' . substitute(vcs#system([
+      let result = result . vcs#system([
             \ 'git',
             \ 'checkout',
             \ vcs#escape(file),
-            \ ]), '\r', '', 'g')
+            \ ])
       continue
     endif
   endfor

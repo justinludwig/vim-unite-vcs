@@ -31,13 +31,13 @@ function! s:commit()
   let yesno = input('commit? (y/n): ')
   if yesno == 'y'
     try
-      let lines = substitute(vcs#system([
+      let lines = vcs#system([
             \ 'svn',
             \ 'commit',
             \ '-F',
             \ g:vcs#svn#commit_msgfile,
             \ join(vcs#escape(s:files), ' ')
-            \ ]), '\r', '', 'g')
+            \ ])
 
       echomsg ' '
       for line in split(lines, "\n")

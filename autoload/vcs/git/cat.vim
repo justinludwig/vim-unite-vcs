@@ -7,9 +7,10 @@ function! vcs#git#cat#do(args)
   let root = vcs#vcs('root', [target])
   return substitute(vcs#system([
         \ 'git',
-        \ 'show',
+        \ 'cat-file',
+        \ '-p',
         \ revision . ":" . vcs#escape(target[strlen(root) + 1:-1])
-        \ ]), '\r', '', 'g')
+        \ ]), '\n$', '', 'g')
 endfunction
 
 let &cpo = s:save_cpo

@@ -21,6 +21,8 @@ function! vcs#detect(args)
   return ''
 endfunction
 
+
+" TODO: redesign architecture.
 function! vcs#vcs(command, args)
   " detect vcs type.
   let target = vcs#target(a:args)
@@ -31,7 +33,7 @@ function! vcs#vcs(command, args)
   endif
 
   " move current directory & do command.
-  let root = {'vcs#' . type . '#root#do'}(a:args)
+  let root = {'vcs#' . type . '#root#do'}([target])
   let save = getcwd()
 
   call vcs#execute(['cd', root])
@@ -45,32 +47,30 @@ function! vcs#vcs(command, args)
   return result
 endfunction
 
-" TODO: refactor.
 function! vcs#target(args)
-  if type(a:args) == type([])
-    let args = a:args
-    if len(args) == 0
-      let args = [expand('%')]
-
-      let filetype = getbufvar(bufnr('%'), '&filetype')
-      if filetype == 'vimshell'
-        let args = [b:vimshell.current_dir]
-      endif
-      if filetype == 'vimfiler'
-        let args = [b:vimfiler.current_dir]
-      endif
-    endif
-  else
-    let args = [a:args]
+  "  target given.
+  if type('') == type(a:args) || (type([]) == type(a:args) && len(a:args))
+    return fnamemodify(type([]) == type(a:args) ? a:args[0] : a:args, ':p')
   endif
-  let _ = type(args) == type([]) ? args[0] : args
-  let target = type(_) == type([]) ? _[0] : _
-  let target = fnamemodify(target, ':p')
-  return target
+
+  " target auto detect.
+  let filetype = getbufvar(bufnr('%'), '&filetype')
+  if filetype == 'vimshell'
+    let target = b:vimshell.current_dir
+  endif
+  if filetype == 'vimfiler'
+    let target = b:vimfiler.current_dir
+  endif
+  return fnamemodify(exists('target') ? target : expand('%'), ':p')
 endfunction
 
 function! vcs#execute(list)
   execute join(a:list, ' ')
+endfunction
+
+function! vcs#system(list)
+  let result = exists('g:loaded_vimproc') ? call('vimproc#system', [join(a:list, ' ')]) : call('system', [join(a:list, ' ')])
+  return vcs#trim_cr(result)
 endfunction
 
 function! vcs#escape(files)
@@ -80,8 +80,8 @@ function! vcs#escape(files)
   return escape(substitute(a:files, '\\', '/', 'g'), ' ')
 endfunction
 
-function! vcs#system(list)
-  return exists('g:loaded_vimproc') ? call('vimproc#system', [join(a:list, ' ')]) : call('system', [join(a:list, ' ')])
+function! vcs#trim_cr(string)
+  return substitute(a:string, '\r', '', 'g')
 endfunction
 
 function! vcs#diff_file_with_string(path, arg)

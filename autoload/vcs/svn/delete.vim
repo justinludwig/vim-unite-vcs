@@ -3,11 +3,11 @@ set cpo&vim
 
 function! vcs#svn#delete#do(args)
   let files = type(a:args) == type([]) ? a:args : [a:args]
-  return substitute(vcs#system([
+  return vcs#system([
         \ 'svn',
         \ 'delete',
         \ join(vcs#escape(files), ' ')
-        \ ]), '\r', '', 'g')
+        \ ])
 endfunction
 
 let &cpo = s:save_cpo

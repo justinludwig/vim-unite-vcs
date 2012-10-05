@@ -32,14 +32,14 @@ function! s:commit()
   if yesno == 'y'
     call vcs#execute(['cd', root])
     try
-      let lines = substitute(vcs#system([
+      let lines = vcs#system([
             \ 'git',
             \ 'commit',
             \ '--include',
             \ '-F',
             \ '.git/COMMIT_EDITMSG',
             \ join(vcs#escape(s:files), ' ')
-            \ ]), '\r', '', 'g')
+            \ ])
 
       echomsg ' '
       for line in split(lines, "\n")
