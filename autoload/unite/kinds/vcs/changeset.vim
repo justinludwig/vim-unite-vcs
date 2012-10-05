@@ -15,6 +15,7 @@ let s:kind = {
 let s:kind.action_table.diff = {
       \ 'description': 'diff with original.',
       \ 'is_selectable': 1,
+      \ 'is_quit': 0
       \ }
 function! s:kind.action_table.diff.func(candidates)
   for candidate in a:candidates
@@ -28,6 +29,7 @@ endfunction
 let s:kind.action_table.diff_prev = {
       \ 'description': 'diff with previous revision.',
       \ 'is_selectable': 1,
+      \ 'is_quit': 0
       \ }
 function! s:kind.action_table.diff_prev.func(candidates)
   for candidate in a:candidates

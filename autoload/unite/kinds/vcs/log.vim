@@ -7,7 +7,7 @@ endfunction
 
 let s:kind = {
       \ 'name': 'vcs/log',
-      \ 'default_action': 'changeset',
+      \ 'default_action': 'diff_prev',
       \ 'action_table': {},
       \ 'parents': ['vcs/file']
       \ }
@@ -47,8 +47,9 @@ function! s:kind.action_table.changeset.func(candidates)
 endfunction
 
 let s:kind.action_table.diff = {
-      \ 'description': 'display candidates diff, if candidates path equals to source path.',
+      \ 'description': 'display candidates diff, if source path is file.',
       \ 'is_selectable': 0,
+      \ 'is_quit': 0
       \ }
 function! s:kind.action_table.diff.func(candidates)
   let candidate = type(a:candidates) == type([]) ? a:candidates[0] : a:candidates
@@ -58,13 +59,19 @@ function! s:kind.action_table.diff.func(candidates)
           \ 'string': vcs#vcs('cat', [candidate.action__path, candidate.action__revision])
           \ })
   else
-    call unite#start_temporary([['vcs/changeset', candidate.action__path, candidate.action__revision]])
+    let candidates = unite#get_candidates([['vcs/changeset', candidate.action__path, candidate.action__revision]])
+    if len(candidates) > 1
+      call unite#start_temporary([['vcs/changeset', candidate.action__path, candidate.action__revision]])
+    else
+      call unite#do_candidates_action('diff', candidates)
+    endif
   endif
 endfunction
 
 let s:kind.action_table.diff_prev = {
-      \ 'description': 'display candidates diff previous log, if candidates path equals to source path.',
+      \ 'description': 'display candidates diff previous log, if source path is file.',
       \ 'is_selectable': 0,
+      \ 'is_quit': 0
       \ }
 function! s:kind.action_table.diff_prev.func(candidates)
   let candidate = type(a:candidates) == type([]) ? a:candidates[0] : a:candidates
@@ -77,7 +84,12 @@ function! s:kind.action_table.diff_prev.func(candidates)
           \ 'string': vcs#vcs('cat', [candidate.action__path, candidate.action__prev_revision])
           \ })
   else
-    call unite#start_temporary([['vcs/changeset', candidate.action__path, candidate.action__revision]])
+    let candidates = unite#get_candidates([['vcs/changeset', candidate.action__path, candidate.action__revision]])
+    if len(candidates) > 1
+      call unite#start_temporary([['vcs/changeset', candidate.action__path, candidate.action__revision]])
+    else
+      call unite#do_candidates_action('diff_prev', candidates)
+    endif
   endif
 endfunction
 
