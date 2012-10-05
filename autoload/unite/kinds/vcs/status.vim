@@ -16,7 +16,6 @@ let s:kind.action_table.commit = {
       \ 'description': 'vcs commit for candidate.',
       \ 'is_selectable': 1,
       \ 'is_invalidate_cache': 1,
-      \ 'is_quit': 0,
       \ }
 function! s:kind.action_table.commit.func(candidates)
   let candidates = type(a:candidates) == type([]) ? a:candidates : [a:candidates]
