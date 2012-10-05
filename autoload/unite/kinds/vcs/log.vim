@@ -59,12 +59,7 @@ function! s:kind.action_table.diff.func(candidates)
           \ 'string': vcs#vcs('cat', [candidate.action__path, candidate.action__revision])
           \ })
   else
-    let candidates = unite#get_candidates([['vcs/changeset', candidate.action__path, candidate.action__revision]])
-    if len(candidates) > 1
-      call unite#start_temporary([['vcs/changeset', candidate.action__path, candidate.action__revision]])
-    else
-      call unite#do_candidates_action('diff', candidates)
-    endif
+    call unite#start_temporary([['vcs/changeset', candidate.action__path, candidate.action__revision]])
   endif
 endfunction
 
@@ -84,12 +79,7 @@ function! s:kind.action_table.diff_prev.func(candidates)
           \ 'string': vcs#vcs('cat', [candidate.action__path, candidate.action__prev_revision])
           \ })
   else
-    let candidates = unite#get_candidates([['vcs/changeset', candidate.action__path, candidate.action__revision]])
-    if len(candidates) > 1
-      call unite#start_temporary([['vcs/changeset', candidate.action__path, candidate.action__revision]])
-    else
-      call unite#do_candidates_action('diff_prev', candidates)
-    endif
+    call unite#start_temporary([['vcs/changeset', candidate.action__path, candidate.action__revision]])
   endif
 endfunction
 
