@@ -40,6 +40,7 @@ function! vcs#vcs(command, args)
   try
     let result = {'vcs#' . type . '#' . a:command . '#do'}(a:args)
   catch
+    echomsg v:exception
     let result = ''
   endtry
   call vcs#execute(['cd', save])
@@ -68,8 +69,8 @@ function! vcs#execute(list)
   execute join(a:list, ' ')
 endfunction
 
-function! vcs#system(list)
-  let result = exists('g:loaded_vimproc') ? call('vimproc#system', [join(a:list, ' ')]) : call('system', [join(a:list, ' ')])
+function! vcs#system(list, ...)
+  let result = exists('g:loaded_vimproc') ? call('vimproc#system', [join(a:list, ' ')] + a:000) : call('system', [join(a:list, ' ')])
   return vcs#trim_cr(result)
 endfunction
 
