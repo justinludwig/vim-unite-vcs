@@ -18,7 +18,7 @@ function! vcs#git#commit#do(args)
 
   augroup VimUniteVcsGitCommit
     autocmd!
-    autocmd! BufWinEnter <buffer> setlocal bufhidden=delete nobuflisted noswapfile
+    autocmd! BufWinEnter <buffer> setlocal bufhidden=wipe nobuflisted noswapfile
     autocmd! BufWritePre <buffer> g/^#\|^\s*$/d
     autocmd! BufWinLeave <buffer> call s:commit()
   augroup END
