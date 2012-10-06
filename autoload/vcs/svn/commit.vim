@@ -17,8 +17,7 @@ function! vcs#svn#commit#do(args)
 
   augroup VimUniteVcsSvnCommit
     autocmd!
-    autocmd! BufWinEnter <buffer> setlocal bufhidden=delete nobuflisted noswapfile
-    autocmd! BufWritePre <buffer> g/^#\|^\s*$/d
+    autocmd! BufWinEnter <buffer> setlocal bufhidden=wipe nobuflisted noswapfile
     autocmd! BufWinLeave <buffer> call s:commit()
   augroup END
 endfunction
