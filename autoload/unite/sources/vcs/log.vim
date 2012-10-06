@@ -14,7 +14,7 @@ function! s:source.gather_candidates(args, context)
   if !a:context.is_redraw
     let path = vcs#target(a:args)
     if vcs#detect(path) == ''
-      call unite#print_message('[vcs/status] vcs not detected: ' . path)
+      call unite#print_message('[vcs/log] vcs not detected: ' . path)
       return []
     endif
     let a:context.source__path = path
