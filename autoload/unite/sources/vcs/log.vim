@@ -13,13 +13,16 @@ let s:source = {
 function! s:source.gather_candidates(args, context)
   if !a:context.is_redraw
     let path = vcs#target(a:args)
-    if vcs#detect(path) == ''
+    let type = vcs#detect(path)
+    if type == ''
       call unite#print_message('[vcs/log] vcs not detected: ' . path)
       return []
     endif
     let a:context.source__path = path
+    let a:context.source__type = type
   else
     let path = a:context.source__path
+    let type = a:context.source__type
   endif
 
   let root = vcs#vcs('root', [path])
@@ -30,6 +33,11 @@ function! s:source.gather_candidates(args, context)
   let revisionlen = max(map(copy(logs), "strlen(v:val.revision)"))
   let datelen = max(map(copy(logs), "strlen(split(v:val.date, ' ')[0])"))
   let authorlen = max(map(copy(logs), "strlen(split(v:val.author, ' ')[0])"))
+
+  let kind = 'vcs/log'
+  if len(keys(unite#get_kinds(kind . '/' . type))) > 0
+    let kind = kind . '/' . type
+  endif
   return map(logs, "{
         \ 'word': s:padding(v:val.revision, revisionlen) . ' | '. s:padding(v:val.date, datelen) . ' | '. s:padding(v:val.author, authorlen) . ' | ' . v:val.message,
         \ 'source__path': path,
@@ -38,7 +46,7 @@ function! s:source.gather_candidates(args, context)
         \ 'action__prev_revision': v:val.prev_revision,
         \ 'action__author': v:val.author,
         \ 'action__message': v:val.message,
-        \ 'kind': 'vcs/log'
+        \ 'kind': kind
         \ }")
 endfunction
 

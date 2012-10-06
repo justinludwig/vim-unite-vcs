@@ -2,7 +2,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! unite#kinds#vcs#log#define()
-  return [s:kind]
+  return [s:kind] + unite#kinds#vcs#get_kinds('vcs/log')
 endfunction
 
 let s:kind = {
