@@ -18,6 +18,7 @@ function! vcs#svn#commit#do(args)
   augroup VimUniteVcsSvnCommit
     autocmd!
     autocmd! BufWinEnter <buffer> setlocal bufhidden=wipe nobuflisted noswapfile
+    autocmd! BufWritePre <buffer> execute '%s/' . g:vcs#svn#commit_ignore . '\_.*//g'
     autocmd! BufWinLeave <buffer> call s:commit()
   augroup END
 endfunction
@@ -51,6 +52,9 @@ function! s:commit()
   call vcs#execute(['cd', save])
 
   let s:files = []
+endfunction
+
+function! s:trim_msgfile()
 endfunction
 
 function! s:make_msgfile()
