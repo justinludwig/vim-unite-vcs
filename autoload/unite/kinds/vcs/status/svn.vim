@@ -7,7 +7,7 @@ endfunction
 
 let s:kind = {
       \ 'name': 'vcs/status/svn',
-      \ 'default_action': 'open',
+      \ 'default_action': 'diff',
       \ 'action_table': {},
       \ 'parents': ['vcs/status']
       \ }

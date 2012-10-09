@@ -63,9 +63,11 @@ function! s:make_msgfile()
 
   call vcs#execute(['cd', root])
   try
-    let status = map(vcs#vcs('status', s:files), "v:val.status . v:val.path[len(root) + 1:-1]")
+    let status = filter(vcs#vcs('status', [root]), "index(s:files, v:val.path) > -1")
+    let status = map(status, "v:val.status . v:val.path[len(root) + 1:-1]")
     call writefile(['', g:vcs#svn#commit_ignore, ''] + status, g:vcs#svn#commit_msgfile)
   catch
+    echomsg v:exception
   endtry
   call vcs#execute(['cd', save])
 endfunction
