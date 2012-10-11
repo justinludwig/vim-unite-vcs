@@ -1,113 +1,83 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-let s:detect_cache = {}
-
-function! vcs#detect(args)
-  let target = vcs#escape(vcs#target(a:args))
-
-  if exists('s:detect_cache[target]')
-    return s:detect_cache[target]
+let s:type_cache = {}
+function! vcs#get_type(path)
+  let path = fnamemodify(vcs#util#substitute_path_separator(a:path), ':p:h')
+  if executable('git') && finddir('.git', path . ';', ':p:h:h') != ''
+    let s:type_cache[path] = 'git'
   endif
-
-  if executable('git') && finddir('.git', target . ';', ':p:h:h') != ''
-    let s:detect_cache[target] = 'git'
-    return 'git'
+  if executable('svn') && finddir('.svn', path . ';', ':p:h:h') != ''
+    let s:type_cache[path] = 'svn'
   endif
-  if executable('svn') && finddir('.svn', target . ';', ':p:h:h') != ''
-    let s:detect_cache[target] = 'svn'
-    return 'svn'
-  endif
-  return ''
+  return get(s:type_cache, path, '')
 endfunction
 
+function! vcs#is_type(type, path)
+  return a:type == vcs#get_type(a:path)
+endfunction
 
-" TODO: redesign architecture.
-function! vcs#vcs(command, args)
-  " detect vcs type.
-  let target = vcs#target(a:args)
-  let type = vcs#detect(target)
-  if type == ''
-    echoerr 'vcs can not detected: ' . target
+function! vcs#get_root_dir(path)
+  if vcs#get_type(a:path) == 'git'
+    let target_dir = '.git'
+  endif
+  if vcs#get_type(a:path) == 'svn'
+    let dir = '.svn'
+  endif
+  if !exists('dir')
+    throw 'vcs#get_root_dir: vcs not detected.'
     return
   endif
 
-  " move current directory & do command.
-  let root = {'vcs#' . type . '#root#do'}([target])
-  let save = getcwd()
+  let path = fnamemodify(vcs#util#substitute_path_separator(a:path), ':p')
+  while finddir(dir, fnamemodify(path, ':p:h:h') . ';') != ''
+    let path = fnamemodify(path, ':p:h:h')
+  endwhile
+  return path
+endfunction
 
-  call vcs#execute(['cd', root])
+function! vcs#vcs(command, command_args, global_args)
+  " get command working dir.
+  let working_dir = get(vcs#util#is_dict(a:global_args) ? a:global_args : {},
+        \ 'working_dir',
+        \ s:get_working_dir())
+
+  " try vcs detect.
+  if vcs#get_type(working_dir) == ''
+    throw 'vcs#vcs: vcs not detected.'
+    return
+  endif
+
+  " do command.
+  let function_name = printf('vcs#type#%s#%s#do', vcs#get_type(working_dir), a:command)
+  return s:call_with_working_dir(function_name,
+        \ vcs#util#is_dict(a:command_args) ? a:command_args : {},
+        \ working_dir)
+endfunction
+
+function! s:get_working_dir()
+  let working_dir = expand('%')
+  if exists('b:vimshell.current_dir')
+    let working_dir = b:vimshell.current_dir
+  endif
+  if exists('b:vimfiler.current_dir')
+    let working_dir = b:vimfiler.current_dir
+  endif
+  return fnamemodify(working_dir, ':p')
+endfunction
+
+function! s:call_with_working_dir(function_name, args, working_dir)
+  let current_dir = getcwd()
+  call vcs#util#execute('lcd', a:working_dir)
   try
-    let result = {'vcs#' . type . '#' . a:command . '#do'}(a:args)
+    let result = call(a:function_name, [a:args])
   catch
-    echomsg v:exception
-    let result = ''
+    call vcs#util#execute('lcd', current_dir)
+    throw v:exception
+    return
   endtry
-  call vcs#execute(['cd', save])
-
-  return result
-endfunction
-
-function! vcs#target(args)
-  "  target given.
-  if type('') == type(a:args) || (type([]) == type(a:args) && len(a:args))
-    return fnamemodify(type([]) == type(a:args) ? a:args[0] : a:args, ':p')
-  endif
-
-  " target auto detect.
-  let filetype = getbufvar(bufnr('%'), '&filetype')
-  if filetype == 'vimshell'
-    let target = b:vimshell.current_dir
-  endif
-  if filetype == 'vimfiler'
-    let target = b:vimfiler.current_dir
-  endif
-  return fnamemodify(exists('target') ? target : expand('%'), ':p')
-endfunction
-
-function! vcs#execute(list)
-  execute join(a:list, ' ')
-endfunction
-
-function! vcs#system(list, ...)
-  let result = exists('g:loaded_vimproc') ? call('vimproc#system', [join(a:list, ' ')] + a:000) : call('system', [join(a:list, ' ')])
-  return vcs#trim_cr(result)
-endfunction
-
-function! vcs#escape(files)
-  if type(a:files) == type([])
-    return map(a:files, "escape(substitute(v:val, '\\', '/', 'g'), ' ')")
-  endif
-  return escape(substitute(a:files, '\\', '/', 'g'), ' ')
-endfunction
-
-function! vcs#trim_cr(string)
-  return substitute(a:string, '\r', '', 'g')
-endfunction
-
-function! vcs#diff_file_with_string(path, arg)
-  call vcs#execute(['tabedit', a:path])
-  diffthis
-
-  vnew
-  put!=a:arg.string
-  setlocal bufhidden=delete buftype=nofile nobuflisted noswapfile nomodifiable
-  call vcs#execute(['file', a:arg.name])
-  diffthis
-endfunction
-
-function! vcs#diff_string_with_string(arg1, arg2)
-  tabnew
-  put!=a:arg1.string
-  setlocal bufhidden=delete buftype=nofile nobuflisted noswapfile nomodifiable
-  call vcs#execute(['file', a:arg1.name])
-  diffthis
-
-  vnew
-  put!=a:arg2.string
-  setlocal bufhidden=delete buftype=nofile nobuflisted noswapfile nomodifiable
-  call vcs#execute(['file', a:arg2.name])
-  diffthis
+  call vcs#util#execute('lcd', current_dir)
+  return exists('result') ? result : ''
 endfunction
 
 let &cpo = s:save_cpo
