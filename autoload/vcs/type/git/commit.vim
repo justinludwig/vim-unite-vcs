@@ -3,7 +3,7 @@ set cpo&vim
 
 function! vcs#type#git#commit#do(args)
   if !has_key(a:args, 'paths') || !vcs#util#is_list(a:args.paths)
-    echoerr 'vcs#type#git#commit: invalid argument "paths".'
+    throw 'vcs#type#git#commit: invalid argument "paths".'
   endif
   let paths = map(a:args.paths, 'vcs#util#substitute_path_separator(v:val)')
 endfunction

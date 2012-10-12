@@ -3,7 +3,7 @@ set cpo&vim
 
 function! vcs#type#svn#commit#do(args)
   if !has_key(a:args, 'paths') || !vcs#util#is_list(a:args.paths)
-    echoerr 'vcs#type#svn#commit: invalid argument "paths".'
+    throw 'vcs#type#svn#commit: invalid argument "paths".'
   endif
   return map(a:args.paths, 'vcs#util#substitute_path_separator(v:val)')
 endfunction

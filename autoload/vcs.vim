@@ -26,7 +26,6 @@ function! vcs#get_root_dir(path)
   endif
   if !exists('dir')
     throw 'vcs#get_root_dir: vcs not detected.'
-    return
   endif
 
   let path = fnamemodify(vcs#util#substitute_path_separator(a:path), ':p')
@@ -45,7 +44,6 @@ function! vcs#vcs(command, command_args, global_args)
   " try vcs detect.
   if vcs#get_type(working_dir) == ''
     throw 'vcs#vcs: vcs not detected.'
-    return
   endif
 
   " do command.
@@ -73,11 +71,13 @@ function! s:call_with_working_dir(function_name, args, working_dir)
     let result = call(a:function_name, [a:args])
   catch
     call vcs#util#execute('lcd', current_dir)
-    throw v:exception
-    return
   endtry
   call vcs#util#execute('lcd', current_dir)
-  return exists('result') ? result : ''
+
+  if v:exception != ''
+    throw v:exception
+  endif
+  return result
 endfunction
 
 let &cpo = s:save_cpo
