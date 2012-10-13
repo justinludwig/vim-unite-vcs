@@ -14,7 +14,7 @@ let output = [
 Context Source.run()
 
   It 'parse output'
-    let statuses = vcs#type#git#status#parse(join(output, "\n"))
+    let statuses = versions#type#git#status#parse(join(output, "\n"))
     Should len(statuses) == 4
     Should statuses[0].status == 'M '
     Should statuses[1].status == 'UU'
@@ -23,12 +23,12 @@ Context Source.run()
   End
 
   It 'checking status line'
-    Should vcs#type#git#status#is_status_line(output[0])
-    Should !vcs#type#git#status#is_status_line(output[4])
+    Should versions#type#git#status#is_status_line(output[0])
+    Should !versions#type#git#status#is_status_line(output[4])
   End
 
   It 'parse one line'
-    let s = vcs#type#git#status#line2status(output[0])
+    let s = versions#type#git#status#line2status(output[0])
     Should s.line == 'M  web/test/test1'
     Should s.status == 'M '
     Should s.path == 'web/test/test1'

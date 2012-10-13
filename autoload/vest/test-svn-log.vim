@@ -21,10 +21,9 @@ let output = [
 Context Source.run()
 
   It 'parse output'
-    let logs = vcs#type#svn#log#parse(join(output, "\n"))
-    Should len(logs) == 2
+    let logs = versions#type#svn#log#parse(join(output, "\n"))
 
-    echo PP(logs)
+    Should len(logs) == 2
 
     Should logs[0].revision == '5'
     Should logs[0].message == join(['test commit1.', 'test commit2.'], "\n")
@@ -40,7 +39,7 @@ Context Source.run()
   End
 
   It 'parse one block'
-    let l = vcs#type#svn#log#lines2log(join(output[1:4], "\n"))
+    let l = versions#type#svn#log#lines2log(join(output[1:4], "\n"))
     Should l.revision == '5'
     Should l.message == join(['test commit1.', 'test commit2.'], "\n")
     Should l.author == 'hrsh7th'

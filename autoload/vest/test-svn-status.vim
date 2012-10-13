@@ -14,7 +14,7 @@ let output = [
 Context Source.run()
 
   It 'parse output'
-    let statuses = vcs#type#svn#status#parse(join(output, "\n"))
+    let statuses = versions#type#svn#status#parse(join(output, "\n"))
     Should len(statuses) == 4
     Should statuses[0].status == 'X      '
     Should statuses[1].status == '    X  '
@@ -23,12 +23,12 @@ Context Source.run()
   End
 
   It 'checking status line'
-    Should vcs#type#svn#status#is_status_line(output[0])
-    Should !vcs#type#svn#status#is_status_line(output[4])
+    Should versions#type#svn#status#is_status_line(output[0])
+    Should !versions#type#svn#status#is_status_line(output[4])
   End
 
   It 'parse one line'
-    let s = vcs#type#svn#status#line2status(output[0])
+    let s = versions#type#svn#status#line2status(output[0])
     Should s.line == 'X       web/test/test1'
     Should s.status == 'X      '
     Should s.path == 'web/test/test1'
