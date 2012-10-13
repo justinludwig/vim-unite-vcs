@@ -3,8 +3,8 @@ set cpo&vim
 
 function! versions#type#git#status#do(args)
   let path = get(a:args, 'path', './')
-  let output = versions#util#system(printf('git status --short %s'),
-        \ versions#util#substitute_path_separator(path))
+  let output = versions#util#system(printf('git status --short %s',
+        \ versions#util#substitute_path_separator(path)))
   return versions#type#git#status#parse(output)
 endfunction
 

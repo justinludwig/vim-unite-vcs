@@ -11,10 +11,10 @@ function! versions#type#git#log#do(args)
   let limit = '-' . get(a:args, 'limit',
         \ g:versions#type#git#log#limit)
 
-  let output = versions#util#system(printf('git log --pretty=format:"%s" %s %s'),
+  let output = versions#util#system(printf('git log --pretty=format:"%s" %s %s',
         \ g:versions#type#git#log#format,
         \ limit,
-        \ path)
+        \ path))
 
   return versions#type#git#log#parse(output)
 endfunction

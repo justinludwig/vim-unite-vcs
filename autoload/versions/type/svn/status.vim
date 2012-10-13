@@ -3,8 +3,8 @@ set cpo&vim
 
 function! versions#type#svn#status#do(args)
   let path = get(a:args, 'path', './')
-  let output = versions#util#system(printf('svn status --ignore-externals %s'),
-        \ versions#util#substitute_path_separator(path))
+  let output = versions#util#system(printf('svn status --ignore-externals %s',
+        \ versions#util#substitute_path_separator(path)))
   return versions#type#svn#status#parse(output)
 endfunction
 

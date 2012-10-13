@@ -13,7 +13,7 @@ function! versions#type#svn#log#do(args)
   let stop_on_copy = get(a:args, 'stop_on_copy',
         \ g:versions#type#svn#log#stop_on_copy)
 
-  let output = versions#util#system(printf('svn log --incremental --limit %s %s %s'),
+  let output = versions#util#system(printf('svn log --incremental --limit %s %s %s',
         \ limit,
         \ stop_on_copy,
         \ versions#util#substitute_path_separator(path)))
