@@ -7,22 +7,28 @@ endfunction
 
 let s:source = {
       \ 'name': 'versions/svn/status',
-      \ 'description': 'vcs repository status.'
+      \ 'description': 'vcs repository status.',
+      \ 'hooks': {},
       \ }
 
+function! s:source.hooks.on_init(args, context)
+  let a:context.source__args = a:args
+endfunction
+
 function! s:source.gather_candidates(args, context)
-  if !a:context.is_redraw
-  else
-  endif
+  let path = get(a:context.source__args, 0,
+        \ versions#get_working_dir())
 
-  call unite#print_message('[versions/status] type: ' . versions#get_type('.'))
-  call unite#print_message('[versions/status] path: ' . versions#get_root_dir('.'))
+  call unite#print_message('[versions/status] type: ' . versions#get_type(path))
+  call unite#print_message('[versions/status] path: ' . versions#get_root_dir(path))
 
-  return map(versions#command('status', { 'path': '.' }, { 'working_dir': '.' }), "{
-        \ 'word': v:val.status . ' | '. v:val.path,
-        \ 'action__path': v:val.path,
-        \ 'action__status': v:val.status,
-        \ 'kind': 'versions/svn/status',
+  let statuses = versions#command('status', { 'path': versions#get_root_dir(path) }, {
+        \ 'working_dir': versions#get_root_dir(path)
+        \ })
+  return map(statuses, "{
+        \   'word': v:val.status . ' | ' . v:val.path,
+        \   'action__status': v:val,
+        \   'kind': 'versions/svn/status',
         \ }")
 endfunction
 

@@ -2,7 +2,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! unite#sources#versions#define()
-  return [s:source] + unite#sources#versions#get_sources('versions')
+  return [s:source] + unite#sources#versions#get_sources('versions', 1)
 endfunction
 
 let s:source = {
@@ -13,7 +13,8 @@ let s:source = {
 function! s:source.gather_candidates(args, context)
   let path = get(a:args, 0,
         \ versions#get_working_dir())
-  let sources = unite#sources#versions#get_sources('versions/' .
+  let sources = unite#sources#versions#get_sources('versions')
+  let sources += unite#sources#versions#get_sources('versions/' .
         \ versions#get_type(path))
 
   return map(sources, "{
@@ -24,17 +25,18 @@ function! s:source.gather_candidates(args, context)
         \ }")
 endfunction
 
-function! unite#sources#versions#get_sources(target)
+function! unite#sources#versions#get_sources(target, ...)
+  let is_rec = get(a:000, 0, 0)
   let target = 'autoload/unite/sources/' . a:target
   let paths = []
 
   " target path loop.
-  for path in split(globpath(&runtimepath, target . '/**/*.vim'))
-    let path = substitute(path, '\/\/', '/', 'g')
+  for path in split(globpath(&runtimepath, target . (is_rec ? '/**/*.vim' : '/*.vim')))
+    let path = versions#util#substitute_path_separator(path)
 
     " rtp path loop.
     for rtp in split(&runtimepath, ',')
-      let rtp = substitute(rtp, '\/\/', '/', 'g') . '/' . target
+      let rtp = versions#util#substitute_path_separator(rtp) . '/' . target
 
       if path =~# rtp
         let l1 = strlen(path)
