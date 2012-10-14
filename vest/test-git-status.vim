@@ -28,7 +28,7 @@ Context Source.run()
   End
 
   It 'parse one line'
-    let s = versions#type#git#status#line2status(output[0])
+    let s = versions#type#git#status#create_status(output[0])
     Should s.line == 'M  web/test/test1'
     Should s.status == 'M '
     Should s.path == 'web/test/test1'

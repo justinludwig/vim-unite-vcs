@@ -39,7 +39,7 @@ Context Source.run()
   End
 
   It 'parse one block'
-    let l = versions#type#svn#log#lines2log(join(output[1:4], "\n"))
+    let l = versions#type#svn#log#create_log(join(output[1:4], "\n"))
     Should l.revision == '5'
     Should l.message == join(['test commit1.', 'test commit2.'], "\n")
     Should l.author == 'hrsh7th'

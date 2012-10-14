@@ -46,7 +46,7 @@ function! versions#command(command, command_args, global_args)
   " get command working dir.
   let working_dir = get(versions#util#is_dict(a:global_args) ? a:global_args : {},
         \ 'working_dir',
-        \ s:get_working_dir())
+        \ versions#get_working_dir())
 
   " try versions detect.
   if versions#get_type(working_dir) == ''
@@ -61,7 +61,7 @@ function! versions#command(command, command_args, global_args)
         \ working_dir)
 endfunction
 
-function! s:get_working_dir()
+function! versions#get_working_dir()
   let working_dir = expand('%')
   if exists('b:vimshell.current_dir')
     let working_dir = b:vimshell.current_dir
@@ -84,5 +84,5 @@ function! s:call_with_working_dir(function_name, args, working_dir)
 endfunction
 
 let &cpo = s:save_cpo
-" unlet s:save_cpo
+unlet s:save_cpo
 
