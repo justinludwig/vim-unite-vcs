@@ -13,17 +13,18 @@ let s:source = {
 
 function! s:source.hooks.on_init(args, context)
   let a:context.source__args = {}
-  let a:context.source__args.path = get(a:args, 0, versions#get_working_dir())
+  let a:context.source__args.path = unite#sources#versions#get_path(
+        \ get(a:args, 0, '%'))
 endfunction
 
 function! s:source.gather_candidates(args, context)
   let path = a:context.source__args.path
 
   call unite#print_message('[versions/status] type: ' . versions#get_type(path))
-  call unite#print_message('[versions/status] path: ' . versions#get_root_dir(path))
+  call unite#print_message('[versions/status] path: ' . path)
 
-  let statuses = versions#command('status', { 'path': versions#get_root_dir(path) }, {
-        \ 'working_dir': versions#get_root_dir(path)
+  let statuses = versions#command('status', { 'path': path }, {
+        \ 'working_dir': path
         \ })
   return map(statuses, "{
         \   'word': v:val.status . ' | ' . v:val.path,

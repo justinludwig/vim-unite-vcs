@@ -54,6 +54,16 @@ function! unite#sources#versions#get_sources(target, ...)
   return sources
 endfunction
 
+function! unite#sources#versions#get_path(path)
+  if a:path == '!'
+    return versions#get_root_dir(versions#get_working_dir())
+  endif
+  if a:path == '%'
+    return versions#get_working_dir()
+  endif
+  return a:path
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
