@@ -13,10 +13,8 @@ let s:source = {
 
 function! s:source.hooks.on_init(args, context)
   let a:context.source__args = {}
-  let a:context.source__args.path =
-        \ get(a:context.source__args, 0, versions#get_working_dir())
-  let a:context.source__args.limit =
-        \ get(a:context.source__args, 1, '')
+  let a:context.source__args.path = get(a:args, 0, versions#get_working_dir())
+  let a:context.source__args.limit = get(a:args, 1, '')
 endfunction
 
 function! s:source.gather_candidates(args, context)

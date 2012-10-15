@@ -12,12 +12,14 @@ let s:source = {
       \ }
 
 function! s:source.hooks.on_init(args, context)
-  let a:context.source__args = a:args
+  let a:context.source__args = {}
+  let a:context.source__args.path = get(a:args, 0, versions#get_working_dir())
+  let a:context.source__args.limit = get(a:args, 1, '')
 endfunction
 
 function! s:source.gather_candidates(args, context)
-  let path = get(a:context.source__args, 0, versions#get_working_dir())
-  let limit = get(a:context.source__args, 1, '')
+  let path = a:context.source__args.path
+  let limit = a:context.source__args.limit
 
   call unite#print_message('[versions/log] type: ' . versions#get_type(path))
   call unite#print_message('[versions/log] path: ' . versions#get_root_dir(path))
@@ -37,5 +39,4 @@ endfunction
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
-
 
