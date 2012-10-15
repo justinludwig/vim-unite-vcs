@@ -42,6 +42,17 @@ function! versions#get_root_dir(path)
   return path
 endfunction
 
+function! versions#get_working_dir()
+  let working_dir = expand('%')
+  if exists('b:vimshell.current_dir')
+    let working_dir = b:vimshell.current_dir
+  endif
+  if exists('b:vimfiler.current_dir')
+    let working_dir = b:vimfiler.current_dir
+  endif
+  return fnamemodify(working_dir, ':p')
+endfunction
+
 function! versions#command(command, command_args, global_args)
   " get command working dir.
   let working_dir = get(versions#util#is_dict(a:global_args) ? a:global_args : {},
@@ -59,17 +70,6 @@ function! versions#command(command, command_args, global_args)
   return s:call_with_working_dir(function_name,
         \ versions#util#is_dict(a:command_args) ? filter(a:command_args, 'strlen(v:val)') : {},
         \ working_dir)
-endfunction
-
-function! versions#get_working_dir()
-  let working_dir = expand('%')
-  if exists('b:vimshell.current_dir')
-    let working_dir = b:vimshell.current_dir
-  endif
-  if exists('b:vimfiler.current_dir')
-    let working_dir = b:vimfiler.current_dir
-  endif
-  return fnamemodify(working_dir, ':p')
 endfunction
 
 function! s:call_with_working_dir(function_name, args, working_dir)
