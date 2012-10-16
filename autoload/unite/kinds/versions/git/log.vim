@@ -88,7 +88,7 @@ function! s:kind.action_table.diff_prev.func(candidates)
 
   call versions#diff#string_with_string({
         \   'name': printf('[REMOTE: %s] %s', candidate.action__log.revision, candidate.source__args.path),
-        \   'string': versions#command('cat', {
+        \   'string': versions#command('show', {
         \     'path': candidate.source__args.path,
         \     'revision': candidate.action__log.revision,
         \   }, {
@@ -96,7 +96,7 @@ function! s:kind.action_table.diff_prev.func(candidates)
         \   })
         \ }, {
         \   'name': printf('[REMOTE: %s] %s', candidate.action__log.prev_revision, candidate.source__args.path),
-        \   'string': versions#command('cat', {
+        \   'string': versions#command('show', {
         \     'path': candidate.source__args.path,
         \     'revision': candidate.action__log.prev_revision,
         \   }, {
