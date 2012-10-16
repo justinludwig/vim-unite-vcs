@@ -6,17 +6,17 @@ let g:versions#type#svn#log#stop_on_copy = 1
 let g:versions#type#svn#log#separator = '------------------------------------------------------------------------'
 
 function! versions#type#svn#log#do(args)
-  let path = versions#util#substitute_path_separator(
-        \ get(a:args, 'path', './'))
+  let path = vital#versions#substitute_path_separator(get(
+        \ a:args, 'path', './'))
   let limit = get(a:args, 'limit',
         \ g:versions#type#svn#log#limit)
   let stop_on_copy = get(a:args, 'stop_on_copy',
         \ g:versions#type#svn#log#stop_on_copy)
 
-  let output = versions#util#system(printf('svn log --incremental --limit %s %s %s',
+  let output = vital#versions#system(printf('svn log --incremental --limit %s %s %s',
         \ limit,
-        \ stop_on_copy,
-        \ versions#util#substitute_path_separator(path)))
+        \ stop_on_copy ? '--stop-on-copy' : '',
+        \ vital#versions#get_relative_path(path)))
 
   return versions#type#svn#log#parse(output)
 endfunction
@@ -29,16 +29,17 @@ function! versions#type#svn#log#parse(output)
   let list = filter(list, 'strlen(v:val)')
   let list = map(list, 'versions#type#svn#log#create_log(v:val)')
   let list = filter(list, '!empty(v:val)')
-  return s:append_prev_revision(list)
+  let list = s:append_prev_revision(list)
+  return list
 endfunction
 
 function! versions#type#svn#log#create_log(lines)
   try
-    let lines = split(versions#util#trim(a:lines), "\n")
+    let lines = split(vital#versions#trim(a:lines), "\n")
     let description = lines[0]
     let message = join(lines[2:], "\n")
     let [revision, author, date, _] = map(split(description, "|"),
-          \ 'versions#util#trim(v:val)')
+          \ 'vital#versions#trim(v:val)')
   catch
     return {}
   endtry

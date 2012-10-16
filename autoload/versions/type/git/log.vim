@@ -6,15 +6,15 @@ let g:versions#type#git#log#format = '%x09%H%x09%P%x09%an%x09%ae%x09%ai%x09%s'
 let g:versions#type#git#log#limit = 1000
 
 function! versions#type#git#log#do(args)
-  let path = versions#util#substitute_path_separator(
+  let path = vital#versions#substitute_path_separator(
         \ get(a:args, 'path', './'))
   let limit = '-' . get(a:args, 'limit',
         \ g:versions#type#git#log#limit)
 
-  let output = versions#util#system(printf('git log --graph --pretty=format:"%s" %s %s',
+  let output = vital#versions#system(printf('git log --graph --pretty=format:"%s" %s %s',
         \ g:versions#type#git#log#format,
         \ limit,
-        \ path))
+        \ vital#versions#get_relative_path(path)))
 
   return versions#type#git#log#parse(output)
 endfunction

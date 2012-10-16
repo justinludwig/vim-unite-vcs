@@ -11,8 +11,13 @@ let s:source = {
       \ }
 
 function! s:source.gather_candidates(args, context)
-  let path = get(a:args, 0,
-        \ versions#get_working_dir())
+  let path = get(a:args, 0, versions#get_working_dir())
+
+  if versions#get_type(path) == ''
+    call unite#print_message('[versions] vcs not detected.')
+    return []
+  endif
+
   let sources = unite#sources#versions#get_sources('versions')
   let sources += unite#sources#versions#get_sources('versions/' .
         \ versions#get_type(path))
@@ -32,11 +37,11 @@ function! unite#sources#versions#get_sources(target, ...)
 
   " target path loop.
   for path in split(globpath(&runtimepath, target . (is_rec ? '/**/*.vim' : '/*.vim')))
-    let path = versions#util#substitute_path_separator(path)
+    let path = vital#versions#substitute_path_separator(path)
 
     " rtp path loop.
     for rtp in split(&runtimepath, ',')
-      let rtp = versions#util#substitute_path_separator(rtp) . '/' . target
+      let rtp = vital#versions#substitute_path_separator(rtp) . '/' . target
 
       if path =~# rtp
         let l1 = strlen(path)
@@ -59,7 +64,14 @@ function! unite#sources#versions#get_path(path)
     return versions#get_root_dir(versions#get_working_dir())
   endif
   if a:path == '%'
-    return versions#get_working_dir()
+    let path = expand('%')
+    if exists('b:vimshell.current_dir')
+      let path = b:vimshell.current_dir
+    endif
+    if exists('b:vimfiler.current_dir')
+      let path = b:vimfiler.current_dir
+    endif
+    return fnamemodify(path, ':p')
   endif
   return a:path
 endfunction

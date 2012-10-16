@@ -61,7 +61,7 @@ function! s:kind.action_table.diff.func(candidates)
           \ candidate.action__revision]])
   endif
 
-  call versions#util#diff#file_with_string(candidate.action__log.path, {
+  call versions#diff#file_with_string(candidate.action__log.path, {
         \ 'name': printf('[REMOTE] %s', candidate.action__log.path),
         \ 'string': versions#command('cat', [
         \   candidate.action__log.path,
