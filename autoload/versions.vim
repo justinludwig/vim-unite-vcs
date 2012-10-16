@@ -72,7 +72,7 @@ function! versions#command(command, command_args, global_args)
   let function_name = printf('versions#type#%s#%s#do',
         \ versions#get_type(working_dir), a:command)
   return s:call_with_working_dir(function_name,
-        \ vital#versions#is_dict(a:command_args) ? filter(a:command_args, 'strlen(v:val)') : {},
+        \ vital#versions#is_dict(a:command_args) ? filter(a:command_args, "!vital#versions#is_empty(v:val)") : {},
         \ working_dir)
 endfunction
 

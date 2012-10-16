@@ -31,6 +31,21 @@ function! vital#versions#is_dict(...)
   return call(s:V.is_dict, a:000)
 endfunction
 
+function! vital#versions#is_empty(arg)
+  if vital#versions#is_string(a:arg)
+    return a:arg == ''
+  endif
+  if vital#versions#is_numeric(a:arg)
+    return a:arg == 0
+  endif
+  if vital#versions#is_list(a:arg)
+    return empty(a:arg)
+  endif
+  if vital#versions#is_dict(a:arg)
+    return empty(a:arg)
+  endif
+endfunction
+
 function! vital#versions#substitute_path_separator(...)
   return call(s:V.substitute_path_separator, a:000)
 endfunction
