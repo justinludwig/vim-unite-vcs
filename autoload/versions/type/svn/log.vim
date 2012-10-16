@@ -1,9 +1,15 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-let g:versions#type#svn#log#limit = 1000
-let g:versions#type#svn#log#stop_on_copy = 1
-let g:versions#type#svn#log#separator = '------------------------------------------------------------------------'
+if !exists('g:versions#type#svn#log#limit')
+  let g:versions#type#svn#log#limit = 1000
+endif
+if !exists('g:versions#type#svn#log#stop_on_copy')
+  let g:versions#type#svn#log#stop_on_copy = 1
+endif
+if !exists('g:versions#type#svn#log#separator')
+  let g:versions#type#svn#log#separator = '------------------------------------------------------------------------'
+endif
 
 function! versions#type#svn#log#do(args)
   let path = vital#versions#substitute_path_separator(get(

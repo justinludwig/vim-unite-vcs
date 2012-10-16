@@ -2,8 +2,12 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 " GRAPH, HASH, PREV_HASH, AUTHOR_NAME, AUTHOR_EMAIL, AUTHOR_DATE, SUBJECT
-let g:versions#type#git#log#format = '%x09%H%x09%P%x09%an%x09%ae%x09%ai%x09%s'
-let g:versions#type#git#log#limit = 1000
+if !exists('g:versions#type#git#log#format')
+  let g:versions#type#git#log#format = '%x09%H%x09%P%x09%an%x09%ae%x09%ai%x09%s'
+endif
+if !exists('g:versions#type#git#log#limit')
+  let g:versions#type#git#log#limit = 1000
+endif
 
 function! versions#type#git#log#do(args)
   let path = vital#versions#substitute_path_separator(
