@@ -1,7 +1,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! vital#versions#diff#file_with_string(path, arg2)
+function! versions#diff#file_with_string(path, arg)
   call vital#versions#execute('tabedit', a:path)
   diffthis
 
@@ -12,7 +12,7 @@ function! vital#versions#diff#file_with_string(path, arg2)
   diffthis
 endfunction
 
-function! vital#versions#diff#string_with_string(arg1, arg2)
+function! versions#diff#string_with_string(arg1, arg2)
   tabnew
   put!=a:arg1.string
   setlocal bufhidden=delete buftype=nofile nobuflisted noswapfile nomodifiable

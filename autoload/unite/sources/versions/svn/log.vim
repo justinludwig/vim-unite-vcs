@@ -38,6 +38,7 @@ function! s:source.gather_candidates(args, context)
   return map(logs, "{
         \   'word': v:val.revision . ' | ' . v:val.author . ' | ' . v:val.date . ' | ' . v:val.message,
         \   'action__log': v:val,
+        \   'source__args': a:context.source__args,
         \   'kind': 'versions/svn/log',
         \ }")
 endfunction

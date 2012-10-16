@@ -33,6 +33,7 @@ function! s:source.gather_candidates(args, context)
   return map(statuses, "{
         \   'word': v:val.status . ' | ' . v:val.path,
         \   'action__status': v:val,
+        \   'source__args': a:context.source__args,
         \   'kind': 'versions/git/status',
         \ }")
 endfunction

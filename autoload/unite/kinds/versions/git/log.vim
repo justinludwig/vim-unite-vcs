@@ -55,17 +55,21 @@ let s:kind.action_table.diff = {
 function! s:kind.action_table.diff.func(candidates)
   let candidate = type(a:candidates) == type([]) ? a:candidates[0] : a:candidates
 
-  if !filereadable(candidate.source__path)
+  if !filereadable(candidate.source__args.path)
     return unite#start_temporary([['versions/git/changeset',
           \ candidate.source__args.path,
-          \ candidate.action__revision]])
+          \ candidate.action__log.revision]])
   endif
 
-  call versions#diff#file_with_string(candidate.action__log.path, {
-        \ 'name': printf('[REMOTE] %s', candidate.action__log.path),
-        \ 'string': versions#command('cat', [
-        \   candidate.action__log.path,
-        \   candidate.action__log.revision])})
+  call versions#diff#file_with_string(candidate.source__args.path, {
+        \   'name': printf('[REMOTE: %s] %s', candidate.action__log.revision, candidate.source__args.path),
+        \   'string': versions#command('cat', {
+        \     'path': candidate.source__args.path,
+        \     'revision': candidate.action__log.revision,
+        \   }, {
+        \     'working_dir': fnamemodify(candidate.source__args.path, ':p:h')
+        \   })
+        \ })
 endfunction
 
 let s:kind.action_table.diff_prev = {
@@ -76,25 +80,29 @@ let s:kind.action_table.diff_prev = {
 function! s:kind.action_table.diff_prev.func(candidates)
   let candidate = type(a:candidates) == type([]) ? a:candidates[0] : a:candidates
 
-  if !filereadable(candidate.source__path)
+  if !filereadable(candidate.source__args.path)
     return unite#start_temporary([['versions/git/changeset',
-          \ candidate.action__path,
-          \ candidate.action__revision]])
+          \ candidate.source__args.path,
+          \ candidate.action__log.revision]])
   endif
 
   call versions#diff#string_with_string({
-        \ 'name': printf('[REMOTE: %s] %s',
-        \   candidate.action__revision,
-        \   candidate.action__path),
-        \ 'string': versions#command('cat', [
-        \   candidate.action__path,
-        \   candidate.action__revision])}, {
-        \ 'name': printf('[REMOTE: %s] %s',
-        \   candidate.action__prev_revision,
-        \   candidate.action__path),
-        \ 'string': versions#command('cat', [
-        \   candidate.action__path,
-        \   candidate.action__prev_revision])})
+        \   'name': printf('[REMOTE: %s] %s', candidate.action__log.revision, candidate.source__args.path),
+        \   'string': versions#command('cat', {
+        \     'path': candidate.source__args.path,
+        \     'revision': candidate.action__log.revision,
+        \   }, {
+        \     'working_dir': fnamemodify(candidate.source__args.path, ':p:h')
+        \   })
+        \ }, {
+        \   'name': printf('[REMOTE: %s] %s', candidate.action__log.prev_revision, candidate.source__args.path),
+        \   'string': versions#command('cat', {
+        \     'path': candidate.source__args.path,
+        \     'revision': candidate.action__log.prev_revision,
+        \   }, {
+        \     'working_dir': fnamemodify(candidate.source__args.path, ':p:h')
+        \   })
+        \ })
 endfunction
 
 let &cpo = s:save_cpo
