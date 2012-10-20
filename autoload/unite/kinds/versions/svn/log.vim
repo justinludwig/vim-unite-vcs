@@ -16,11 +16,8 @@ let s:kind.action_table.yank_message = {
       \ 'is_selectable': 0,
       \ }
 function! s:kind.action_table.yank_message.func(candidates)
-  let candidate = type(a:candidates) == type([]) ? a:candidates[0] : a:candidates
-  let @" = candidate.action__log.message
-  if has('clipboard')
-    let @* = @"
-  endif
+  let candidate = vital#versions#is_list(a:candidates) ? a:candidates[0] : a:candidates
+  call unite#kinds#versions#yank(candidate.action__log.message)
 endfunction
 
 let s:kind.action_table.yank_revision = {
@@ -28,11 +25,8 @@ let s:kind.action_table.yank_revision = {
       \ 'is_selectable': 0,
       \ }
 function! s:kind.action_table.yank_revision.func(candidates)
-  let candidate = type(a:candidates) == type([]) ? a:candidates[0] : a:candidates
-  let @" = candidate.action__log.revision
-  if has('clipboard')
-    let @* = @"
-  endif
+  let candidate = vital#versions#is_list(a:candidates) ? a:candidates[0] : a:candidates
+  call unite#kinds#versions#yank(candidate.action__log.revision)
 endfunction
 
 let s:kind.action_table.yank_prev_revision = {
@@ -40,11 +34,8 @@ let s:kind.action_table.yank_prev_revision = {
       \ 'is_selectable': 0,
       \ }
 function! s:kind.action_table.yank_prev_revision.func(candidates)
-  let candidate = type(a:candidates) == type([]) ? a:candidates[0] : a:candidates
-  let @" = candidate.action__log.prev_revision
-  if has('clipboard')
-    let @* = @"
-  endif
+  let candidate = vital#versions#is_list(a:candidates) ? a:candidates[0] : a:candidates
+  call unite#kinds#versions#yank(candidate.action__log.prev_revision)
 endfunction
 
 let s:kind.action_table.diff = {
@@ -53,7 +44,7 @@ let s:kind.action_table.diff = {
       \ 'is_quit': 0
       \ }
 function! s:kind.action_table.diff.func(candidates)
-  let candidate = type(a:candidates) == type([]) ? a:candidates[0] : a:candidates
+  let candidate = vital#versions#is_list(a:candidates) ? a:candidates[0] : a:candidates
 
   if !filereadable(candidate.source__args.path)
     return unite#start_temporary([['versions/svn/changeset',
@@ -78,7 +69,7 @@ let s:kind.action_table.diff_prev = {
       \ 'is_quit': 0
       \ }
 function! s:kind.action_table.diff_prev.func(candidates)
-  let candidate = type(a:candidates) == type([]) ? a:candidates[0] : a:candidates
+  let candidate = vital#versions#is_list(a:candidates) ? a:candidates[0] : a:candidates
 
   if !filereadable(candidate.source__args.path)
     return unite#start_temporary([['versions/svn/changeset',

@@ -41,9 +41,7 @@ function! s:kind.action_table.checkout.func(candidates)
         \ }, {
         \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
         \ })
-  for message in split(messages, "\n")
-    echomsg message
-  endfor
+  call unite#kinds#versions#echomsgs(messages)
 endfunction
 
 let s:kind.action_table.reset = {
@@ -59,9 +57,7 @@ function! s:kind.action_table.reset.func(candidates)
         \ }, {
         \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
         \ })
-  for message in split(messages, "\n")
-    echomsg message
-  endfor
+  call unite#kinds#versions#echomsgs(messages)
 endfunction
 
 let s:kind.action_table.add = {
@@ -72,15 +68,12 @@ let s:kind.action_table.add = {
       \ }
 function! s:kind.action_table.add.func(candidates)
   let candidates = vital#versions#is_list(a:candidates) ? a:candidates : [a:candidates]
-  echomsg PP(candidates)
   let messages = versions#command('add', {
         \   'paths': map(deepcopy(candidates), 'v:val.action__status.path')
         \ }, {
         \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
         \ })
-  for message in split(messages, "\n")
-    echomsg message
-  endfor
+  call unite#kinds#versions#echomsgs(messages)
 endfunction
 
 let s:kind.action_table.reset_soft = {
@@ -92,14 +85,12 @@ let s:kind.action_table.reset_soft = {
 function! s:kind.action_table.reset_soft.func(candidates)
   let candidates = vital#versions#is_list(a:candidates) ? a:candidates : [a:candidates]
   let messages = versions#command('reset', {
-        \   'paths': map(deepcopy(candidates), 'v:val.action__status.path')
+        \   'paths': map(deepcopy(candidates), 'v:val.action__status.path'),
         \   'soft': 1
         \ }, {
         \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
         \ })
-  for message in split(messages, "\n")
-    echomsg message
-  endfor
+  call unite#kinds#versions#echomsgs(messages)
 endfunction
 
 let s:kind.action_table.reset_hard = {
@@ -111,14 +102,12 @@ let s:kind.action_table.reset_hard = {
 function! s:kind.action_table.reset_hard.func(candidates)
   let candidates = vital#versions#is_list(a:candidates) ? a:candidates : [a:candidates]
   let messages = versions#command('reset', {
-        \   'paths': map(deepcopy(candidates), 'v:val.action__status.path')
+        \   'paths': map(deepcopy(candidates), 'v:val.action__status.path'),
         \   'hard': 1
         \ }, {
         \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
         \ })
-  for message in split(messages, "\n")
-    echomsg message
-  endfor
+  call unite#kinds#versions#echomsgs(messages)
 endfunction
 
 let s:kind.action_table.rm = {
@@ -134,9 +123,7 @@ function! s:kind.action_table.rm.func(candidates)
         \ }, {
         \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
         \ })
-  for message in split(messages, "\n")
-    echomsg message
-  endfor
+  call unite#kinds#versions#echomsgs(messages)
 endfunction
 
 let s:kind.action_table.rm_cached = {
@@ -153,9 +140,7 @@ function! s:kind.action_table.rm_cached.func(candidates)
         \ }, {
         \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
         \ })
-  for message in split(messages, "\n")
-    echomsg message
-  endfor
+  call unite#kinds#versions#echomsgs(messages)
 endfunction
 
 let s:kind.action_table.rm_force = {
@@ -172,9 +157,7 @@ function! s:kind.action_table.rm_force.func(candidates)
         \ }, {
         \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
         \ })
-  for message in split(messages, "\n")
-    echomsg message
-  endfor
+  call unite#kinds#versions#echomsgs(messages)
 endfunction
 
 let &cpo = s:save_cpo
