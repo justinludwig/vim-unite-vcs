@@ -41,12 +41,6 @@ function! unite#kinds#versions#yank(text)
   endif
 endfunction
 
-function! unite#kinds#versions#echomsgs(messages)
-  for message in split(a:messages, "\n")
-    echomsg message
-  endfor
-endfunction
-
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

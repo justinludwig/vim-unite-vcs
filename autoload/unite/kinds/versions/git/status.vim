@@ -13,18 +13,34 @@ let s:kind = {
 
 let s:kind.action_table.diff = {
       \ 'description': 'display diff.',
-      \ 'is_selectable': 0,
-      \ 'is_quit': 0
+      \ 'is_selectable': 1,
       \ }
 function! s:kind.action_table.diff.func(candidates)
-  let candidate = vital#versions#is_list(a:candidates) ? a:candidates[0] : a:candidates
-  call versions#diff#file_with_string(candidate.action__status.path, {
-        \   'name': printf('[REMOTE] %s',  candidate.action__status.path),
-        \   'string': versions#command('show', {
-        \     'path': candidate.action__status.path,
-        \   }, {
-        \     'working_dir': fnamemodify(candidate.source__args.path, ':p:h')
-        \   })
+  let candidates = vital#versions#is_list(a:candidates) ? a:candidates : [a:candidates]
+  for candidate in candidates
+    call versions#diff#file_with_string(candidate.action__status.path, {
+          \   'name': printf('[REMOTE] %s',  candidate.action__status.path),
+          \   'string': versions#command('show', {
+          \     'path': candidate.action__status.path,
+          \   }, {
+          \     'working_dir': fnamemodify(candidate.source__args.path, ':p:h')
+          \   })
+          \ })
+  endfor
+endfunction
+
+let s:kind.action_table.commit = {
+      \ 'description': 'commit status.',
+      \ 'is_selectable': 1,
+      \ 'is_invalidate_cache': 1,
+      \ 'is_quit': 0,
+      \ }
+function! s:kind.action_table.commit.func(candidates)
+  let candidates = vital#versions#is_list(a:candidates) ? a:candidates : [a:candidates]
+  call versions#command('commit', {
+        \   'paths': map(deepcopy(candidates), 'v:val.action__status.path')
+        \ }, {
+        \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
         \ })
 endfunction
 
@@ -41,7 +57,7 @@ function! s:kind.action_table.checkout.func(candidates)
         \ }, {
         \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
         \ })
-  call unite#kinds#versions#echomsgs(messages)
+  call vital#versions#echomsgs(messages)
 endfunction
 
 let s:kind.action_table.reset = {
@@ -57,7 +73,7 @@ function! s:kind.action_table.reset.func(candidates)
         \ }, {
         \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
         \ })
-  call unite#kinds#versions#echomsgs(messages)
+  call vital#versions#echomsgs(messages)
 endfunction
 
 let s:kind.action_table.add = {
@@ -73,7 +89,7 @@ function! s:kind.action_table.add.func(candidates)
         \ }, {
         \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
         \ })
-  call unite#kinds#versions#echomsgs(messages)
+  call vital#versions#echomsgs(messages)
 endfunction
 
 let s:kind.action_table.reset_soft = {
@@ -90,7 +106,7 @@ function! s:kind.action_table.reset_soft.func(candidates)
         \ }, {
         \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
         \ })
-  call unite#kinds#versions#echomsgs(messages)
+  call vital#versions#echomsgs(messages)
 endfunction
 
 let s:kind.action_table.reset_hard = {
@@ -107,7 +123,7 @@ function! s:kind.action_table.reset_hard.func(candidates)
         \ }, {
         \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
         \ })
-  call unite#kinds#versions#echomsgs(messages)
+  call vital#versions#echomsgs(messages)
 endfunction
 
 let s:kind.action_table.rm = {
@@ -123,7 +139,7 @@ function! s:kind.action_table.rm.func(candidates)
         \ }, {
         \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
         \ })
-  call unite#kinds#versions#echomsgs(messages)
+  call vital#versions#echomsgs(messages)
 endfunction
 
 let s:kind.action_table.rm_cached = {
@@ -140,7 +156,7 @@ function! s:kind.action_table.rm_cached.func(candidates)
         \ }, {
         \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
         \ })
-  call unite#kinds#versions#echomsgs(messages)
+  call vital#versions#echomsgs(messages)
 endfunction
 
 let s:kind.action_table.rm_force = {
@@ -157,7 +173,7 @@ function! s:kind.action_table.rm_force.func(candidates)
         \ }, {
         \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
         \ })
-  call unite#kinds#versions#echomsgs(messages)
+  call vital#versions#echomsgs(messages)
 endfunction
 
 let &cpo = s:save_cpo

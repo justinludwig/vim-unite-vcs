@@ -51,8 +51,7 @@ function! vital#versions#substitute_path_separator(...)
 endfunction
 
 function! vital#versions#get_relative_path(path)
-  let current_dir = getcwd()
-  if current_dir != fnamemodify(a:path, ':p')
+  if fnamemodify(getcwd(), ':p') != fnamemodify(a:path, ':p')
     return './' . fnamemodify(a:path, ':.')
   endif
   return './'
@@ -72,6 +71,12 @@ function! vital#versions#execute(...)
   execute join(a:000, ' ')
 endfunction
 
+function! vital#versions#echomsgs(messages)
+  for message in split(a:messages, "\n")
+    echomsg message
+  endfor
+endfunction
+
 function! vital#versions#trim(...)
   return vital#versions#trim_right(vital#versions#trim_left(a:000[0]))
 endfunction
@@ -86,6 +91,20 @@ endfunction
 
 function! vital#versions#trim_cr(...)
   return substitute(a:000[0], '\r', '', 'g')
+endfunction
+
+function! vital#versions#yesno(message)
+  let yesno = input(a:message . ' [yes/no] : ')
+  while yesno !~? '^\%(y\%[es]\|n\%[o]\)$'
+    redraw
+    if yesno == ''
+      echo 'canceled.'
+      break
+    endif
+    let yesno = input(a:message . ' [yes/no] : ')
+  endwhile
+
+  return yesno =~? 'y\%[es]'
 endfunction
 
 let &cpo = s:save_cpo

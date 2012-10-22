@@ -41,7 +41,7 @@ function! s:kind.action_table.add.func(candidates)
         \ }, {
         \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
         \ })
-  call unite#kinds#versions#echomsgs(messages)
+  call vital#versions#echomsgs(messages)
 endfunction
 
 let s:kind.action_table.delete = {
@@ -57,7 +57,7 @@ function! s:kind.action_table.delete.func(candidates)
         \ }, {
         \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
         \ })
-  call unite#kinds#versions#echomsgs(messages)
+  call vital#versions#echomsgs(messages)
 endfunction
 
 let s:kind.action_table.revert = {
@@ -73,7 +73,7 @@ function! s:kind.action_table.revert.func(candidates)
         \ }, {
         \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
         \ })
-  call unite#kinds#versions#echomsgs(messages)
+  call vital#versions#echomsgs(messages)
 endfunction
 
 let &cpo = s:save_cpo

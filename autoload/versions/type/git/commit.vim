@@ -8,37 +8,66 @@ let g:versions#type#git#commit#filetype = 'gitcommit'
 let s:paths = []
 
 function! versions#type#git#commit#do(args)
-  let args = a:args
+  call vital#versions#execute('tabedit', s:get_file(getcwd()))
+  call vital#versions#execute('set', 'filetype=' . g:versions#type#git#commit#filetype)
 
-  if !has_key(a:args, 'paths') || !vital#versions#is_list(a:args.paths)
-    let args.paths = []
-  endif
+  let output = vital#versions#system(printf('git commit --dry-run --quiet -- %s',
+        \ join(
+        \   map(deepcopy(a:args.paths),
+        \     'vital#versions#substitute_path_separator(v:val)'
+        \   ),
+        \   ' '
+        \ )))
 
-  call vital#versions#execute(['tabedit',
-        \ g:versions#type#git#commit#filepath])
-  call vital#versions#execute(['set', 'filetype=' .
-        \ g:versions#type#git#commit#filetype])
+  silent % delete _
+  put=output
 
-  let s:paths = map(args.paths,
-        \ 'vital#versions#substitute_path_separator(v:val)')
-  call s:create_messagefile(s:paths)
+  let b:versions = {
+        \ 'context': {
+        \   'type': 'git',
+        \   'command': 'commit',
+        \   'args': a:args,
+        \   'working_dir': getcwd(),
+        \   }
+        \ }
 
-  augroup VimUniteVcsGitCommit
+  augroup VersionsGitCommit
     autocmd!
     autocmd! BufWinEnter <buffer> setlocal bufhidden=wipe nobuflisted noswapfile
-    autocmd! BufWritePre <buffer> g/^#\|^\s*$/d
-    autocmd! BufWinLeave <buffer> call s:commit()
+    autocmd! BufWritePost <buffer> call s:commit()
   augroup END
 endfunction
 
-function! s:create_messagefile(paths)
-  let filepath = printf(versions#get_root_dir(getcwd()) . '/%s/%s',
-        \ g:versions#type#git#commit#filepath,
-        \ g:versions#type#git#commit#filename)
-  let output = vital#versions#system(printf('git commit --quiet -- %s',
-        \ join(paths, ' ')))
-  call writefile(filepath,
-        \ [''] + split(vital#versions#trim_cr(output), "\n"))
+function! s:commit()
+  if !vital#versions#yesno('commit?')
+    return
+  endif
+
+  g/^#\|^\s*$/d
+
+  let current_dir = getcwd()
+  call vital#versions#execute('lcd', b:versions.context.working_dir)
+  try
+    let output = vital#versions#system(printf('git commit -F %s -- %s',
+          \ s:get_file(b:versions.context.working_dir),
+          \ join(
+          \   map(deepcopy(b:versions.context.args.paths),
+          \     'vital#versions#substitute_path_separator(v:val)'
+          \   ),
+          \   ' '
+          \ )))
+    call vital#versions#echomsgs(output)
+  finally
+    call vital#versions#execute('lcd', current_dir)
+  endtry
+endfunction
+
+function! s:get_file(dir)
+  return printf('%s/%s/%s',
+        \   versions#get_root_dir(a:dir),
+        \   g:versions#type#git#commit#filepath,
+        \   g:versions#type#git#commit#filename
+        \ )
 endfunction
 
 let &cpo = s:save_cpo
