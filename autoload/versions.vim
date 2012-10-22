@@ -1,9 +1,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-if !exists('g:versions#debug')
-  let g:versions#debug = 0
-endif
+call vital#versions#define(g:, 'versions#debug', 0)
 
 " TODO: refactor.
 let s:types = [
