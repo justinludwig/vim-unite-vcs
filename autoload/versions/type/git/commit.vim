@@ -54,7 +54,7 @@ function! s:commit()
           \   ),
           \   ' '
           \ )))
-    call vital#versions#echomsgs(output)
+    call vital#versions#echomsgs(vital#versions#trim_cr(output))
   finally
     call vital#versions#execute('lcd', current_dir)
   endtry
