@@ -42,6 +42,7 @@ function! s:commit()
   endif
 
   g/^#\|^\s*$/d
+  write!
 
   let current_dir = getcwd()
   call vital#versions#execute('lcd', b:versions.context.working_dir)
