@@ -37,28 +37,36 @@ function! versions#type#git#commit#do(args)
 endfunction
 
 function! s:commit()
+  if !exists('b:versions') || !exists('b:versions.context')
+    throw 'versions#type#git#commit: context variable is not found.'
+  endif
+  if b:versions.context.type != 'git' || b:versions.context.command != 'commit'
+    throw "versions#type#git#commit: context type is'nt \"commit\"."
+  endif
+
   if !vital#versions#yesno('commit?')
     return
   endif
 
-  g/^#\|^\s*$/d
+  call versions#call(function('s:_commit'),
+        \   b:versions.context.args,
+        \   b:versions.context.working_dir
+        \ )
+endfunction
+
+function! s:_commit(args)
+  global/^#\|^\s*$/d
   write!
 
-  let current_dir = getcwd()
-  call vital#versions#execute('lcd', b:versions.context.working_dir)
-  try
-    let output = vital#versions#system(printf('git commit -F %s -- %s',
-          \ s:get_file(b:versions.context.working_dir),
-          \ join(
-          \   map(deepcopy(b:versions.context.args.paths),
-          \     'vital#versions#substitute_path_separator(v:val)'
-          \   ),
-          \   ' '
-          \ )))
-    call vital#versions#echomsgs(vital#versions#trim_cr(output))
-  finally
-    call vital#versions#execute('lcd', current_dir)
-  endtry
+  let output = vital#versions#system(printf('git commit -F %s -- %s',
+        \ s:get_file(getcwd()),
+        \ join(
+        \   map(deepcopy(a:args.paths),
+        \     'vital#versions#substitute_path_separator(v:val)'
+        \   ),
+        \   ' '
+        \ )))
+  call vital#versions#echomsgs(vital#versions#trim_cr(output))
 endfunction
 
 function! s:get_file(dir)
