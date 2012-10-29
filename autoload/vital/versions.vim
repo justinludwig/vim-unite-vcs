@@ -82,11 +82,11 @@ function! vital#versions#trim(...)
 endfunction
 
 function! vital#versions#trim_right(...)
-  return substitute(a:000[0], '\s*$', '', 'g')
+  return substitute(a:000[0], get(a:000, 1, '\s*') . '$', '', 'g')
 endfunction
 
 function! vital#versions#trim_left(...)
-  return substitute(a:000[0], '^\s*', '', 'g')
+  return substitute(a:000[0], '^' . get(a:000, 1, '\s*'), '', 'g')
 endfunction
 
 function! vital#versions#trim_cr(...)

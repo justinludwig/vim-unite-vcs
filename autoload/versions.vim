@@ -43,7 +43,7 @@ function! versions#get_root_dir(path)
   while finddir(s:type_dir_map[type], fnamemodify(path, ':p:h:h') . ';') != ''
     let path = fnamemodify(path, ':p:h:h')
   endwhile
-  return path
+  return vital#versions#trim_right(vital#versions#substitute_path_separator(path), '/')
 endfunction
 
 function! versions#get_working_dir()
