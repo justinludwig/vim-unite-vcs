@@ -34,32 +34,44 @@ function! versions#type#git#commit#do(args)
   augroup VersionsGitCommit
     autocmd!
     autocmd! BufWinEnter <buffer> setlocal bufhidden=wipe nobuflisted noswapfile
-    autocmd! BufWritePost <buffer> call s:commit()
+    autocmd! BufWritePost <buffer> call versions#type#git#commit#finish()
   augroup END
 endfunction
 
-function! s:commit()
+function! versions#type#git#commit#finish()
+  if !exists('b:versions.context.args')
+    throw 'versions#type#git#commit: b:versions.context.args is not found.'
+  endif
+  if !exists('b:versions.context.working_dir')
+    throw 'versions#type#git#commit: b:versions.context.working_dir is not found.'
+  endif
+  if exists('b:versions.context.type') && b:versions.context.type != 'git'
+    throw 'versions#type#git#commit: invalid b:versions.context.type.'
+  endif
+  if exists('b:versions.context.command') && b:versions.context.command != 'commit'
+    throw 'versions#type#git#commit: invalid b:versions.context.command.'
+  endif
+
   if !vital#versions#yesno('commit?')
     return
   endif
 
   g/^#\|^\s*$/d
 
-  let current_dir = getcwd()
-  call vital#versions#execute('lcd', b:versions.context.working_dir)
-  try
-    let output = vital#versions#system(printf('git commit -F %s -- %s',
-          \ s:get_file(b:versions.context.working_dir),
-          \ join(
-          \   map(deepcopy(b:versions.context.args.paths),
-          \     'vital#versions#substitute_path_separator(v:val)'
-          \   ),
-          \   ' '
-          \ )))
-    call vital#versions#echomsgs(output)
-  finally
-    call vital#versions#execute('lcd', current_dir)
-  endtry
+  call versions#call_with_working_dir(function(printf('<SNR>%d_commit', s:SID())),
+        \ b:versions.context.args,
+        \ b:versions.context.working_dir)
+endfunction
+
+function! s:commit(args)
+  let output = vital#versions#system(printf('git commit -F %s -- %s',
+        \ s:get_file(getcwd()),
+        \ join(
+        \   map(deepcopy(a:args.paths),
+        \     'vital#versions#substitute_path_separator(v:val)'
+        \   ),
+        \   ' '
+        \ )))
 endfunction
 
 function! s:get_file(dir)
@@ -68,6 +80,10 @@ function! s:get_file(dir)
         \   g:versions#type#git#commit#filepath,
         \   g:versions#type#git#commit#filename
         \ )
+endfunction
+
+function! s:SID()
+  return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
 endfunction
 
 let &cpo = s:save_cpo
