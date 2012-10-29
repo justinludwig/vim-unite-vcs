@@ -34,6 +34,7 @@ function! versions#type#git#commit#do(args)
   augroup VersionsGitCommit
     autocmd!
     autocmd! BufWinEnter <buffer> setlocal bufhidden=wipe nobuflisted noswapfile
+    autocmd! BufWritePre <buffer> g/^#\|^\s*$/d
     autocmd! BufWritePost <buffer> call versions#type#git#commit#finish()
   augroup END
 endfunction
@@ -55,8 +56,6 @@ function! versions#type#git#commit#finish()
   if !vital#versions#yesno('commit?')
     return
   endif
-
-  g/^#\|^\s*$/d
 
   call versions#call_with_working_dir(function(printf('<SNR>%d_commit', s:SID())),
         \ b:versions.context.args,
