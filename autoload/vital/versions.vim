@@ -107,6 +107,12 @@ function! vital#versions#yesno(message)
   return yesno =~? 'y\%[es]'
 endfunction
 
+function! vital#versions#define(dict, key, value)
+  if !has_key(a:dict, a:key)
+    let a:dict[a:key] = a:value
+  endif
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

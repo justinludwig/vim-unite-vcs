@@ -1,9 +1,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-if !exists('g:versions#debug')
-  let g:versions#debug = 0
-endif
+call vital#versions#define(g:, 'versions#debug', 0)
 
 " TODO: refactor.
 let s:types = [
@@ -71,14 +69,14 @@ function! versions#command(command, command_args, global_args)
   " do command.
   let function_name = printf('versions#type#%s#%s#do',
         \ versions#get_type(working_dir), a:command)
-  return versions#call_with_working_dir(
+  return versions#call(
         \   function(function_name),
         \   vital#versions#is_dict(a:command_args) ? filter(a:command_args, "!vital#versions#is_empty(v:val)") : {},
         \   working_dir
-        \)
+        \ )
 endfunction
 
-function! versions#call_with_working_dir(function, args, working_dir)
+function! versions#call(function, args, working_dir)
   let current_dir = getcwd()
   call vital#versions#execute('lcd', a:working_dir)
   try

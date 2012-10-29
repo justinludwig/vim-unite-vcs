@@ -57,7 +57,7 @@ function! versions#type#git#commit#finish()
     return
   endif
 
-  call versions#call_with_working_dir(function(printf('<SNR>%d_commit', s:SID())),
+  call versions#call(function(printf('<SNR>%d_commit', s:SID())),
         \ b:versions.context.args,
         \ b:versions.context.working_dir)
 endfunction
