@@ -71,6 +71,7 @@ function! s:commit(args)
         \   ),
         \   ' '
         \ )))
+  call vital#versions#echomsgs(output)
 endfunction
 
 function! s:get_file(dir)
