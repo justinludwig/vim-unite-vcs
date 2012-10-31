@@ -28,6 +28,21 @@ function! s:kind.action_table.diff.func(candidates)
         \ })
 endfunction
 
+let s:kind.action_table.commit = {
+      \ 'description': 'commit status.',
+      \ 'is_selectable': 1,
+      \ 'is_invalidate_cache': 1,
+      \ 'is_quit': 0,
+      \ }
+function! s:kind.action_table.commit.func(candidates)
+  let candidates = vital#versions#is_list(a:candidates) ? a:candidates : [a:candidates]
+  call versions#command('commit', {
+        \   'paths': map(deepcopy(candidates), 'v:val.action__status.path')
+        \ }, {
+        \   'working_dir': fnamemodify(candidates[0].source__args.path, ':p:h')
+        \ })
+endfunction
+
 let s:kind.action_table.add = {
       \ 'description': 'add status.',
       \ 'is_selectable': 1,
