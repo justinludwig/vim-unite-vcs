@@ -1,8 +1,8 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-" GRAPH, HASH, PREV_HASH, AUTHOR_NAME, AUTHOR_EMAIL, AUTHOR_DATE, SUBJECT
-call vital#versions#define(g:, 'versions#type#git#log#format', '%x09%H%x09%P%x09%an%x09%ae%x09%ai%x09%s')
+" HASH, PREV_HASH, AUTHOR_NAME, AUTHOR_EMAIL, AUTHOR_DATE, SUBJECT
+call vital#versions#define(g:, 'versions#type#git#log#format', '%H%x09%P%x09%an%x09%ae%x09%ai%x09%s')
 call vital#versions#define(g:, 'versions#type#git#log#limit', 1000)
 
 function! versions#type#git#log#do(args)
@@ -11,7 +11,7 @@ function! versions#type#git#log#do(args)
   let limit = '-' . get(a:args, 'limit',
         \ g:versions#type#git#log#limit)
 
-  let output = vital#versions#system(printf('git log --graph --pretty=format:"%s" %s %s',
+  let output = vital#versions#system(printf('git log --pretty=format:"%s" %s %s',
         \ g:versions#type#git#log#format,
         \ limit,
         \ vital#versions#get_relative_path(path)))
@@ -27,7 +27,7 @@ endfunction
 
 function! versions#type#git#log#create_log(line)
   try
-    let [graph, revision, prev_revision, author, mail, date, message] =
+    let [revision, prev_revision, author, mail, date, message] =
           \ split(a:line, "\t")
   catch
     return {}
@@ -39,7 +39,6 @@ function! versions#type#git#log#create_log(line)
         \ 'date': matchstr(date,
         \   '\d\{4,4}\-\d\{2,2}-\d\{2,2}\s\d\{2,2}:\d\{2,2}:\d\{2,2}'),
         \ 'message': message,
-        \ 'graph': graph,
         \ }
 endfunction
 
