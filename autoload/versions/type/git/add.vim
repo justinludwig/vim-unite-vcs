@@ -14,8 +14,6 @@ function! versions#type#git#add#do(args)
   let output = vital#versions#system(printf('git add -- %s',
         \ join(args.paths, ' ')))
 
-  echomsg PP(output)
-
   return vital#versions#trim_cr(output)
 endfunction
 
