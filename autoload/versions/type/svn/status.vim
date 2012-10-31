@@ -5,7 +5,7 @@ function! versions#type#svn#status#do(args)
   let path = vital#versions#substitute_path_separator(
         \ get(a:args, 'path', './'))
   let output = vital#versions#system(printf('svn status --ignore-externals %s',
-        \ vital#versions#get_relative_path(path)))
+        \ versions#get_relative_path(path)))
   return versions#type#svn#status#parse(output)
 endfunction
 

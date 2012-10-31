@@ -34,13 +34,6 @@ function! unite#kinds#versions#get_kinds(target, ...)
   return sources
 endfunction
 
-function! unite#kinds#versions#yank(text)
-  let @" = a:text
-  if has('clipboard')
-    let @* = @"
-  endif
-endfunction
-
 let &cpo = s:save_cpo
 unlet s:save_cpo
 

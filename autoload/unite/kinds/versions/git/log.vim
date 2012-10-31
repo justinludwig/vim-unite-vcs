@@ -17,7 +17,7 @@ let s:kind.action_table.yank_message = {
       \ }
 function! s:kind.action_table.yank_message.func(candidates)
   let candidate = vital#versions#is_list(a:candidates) ? a:candidates[0] : a:candidates
-  call unite#kinds#versions#yank(candidate.action__log.message)
+  call vital#versions#yank(candidate.action__log.message)
 endfunction
 
 let s:kind.action_table.yank_revision = {
@@ -26,7 +26,7 @@ let s:kind.action_table.yank_revision = {
       \ }
 function! s:kind.action_table.yank_revision.func(candidates)
   let candidate = vital#versions#is_list(a:candidates) ? a:candidates[0] : a:candidates
-  call unite#kinds#versions#yank(candidate.action__log.revision)
+  call vital#versions#yank(candidate.action__log.revision)
 endfunction
 
 let s:kind.action_table.yank_prev_revision = {
@@ -35,7 +35,7 @@ let s:kind.action_table.yank_prev_revision = {
       \ }
 function! s:kind.action_table.yank_prev_revision.func(candidates)
   let candidate = vital#versions#is_list(a:candidates) ? a:candidates[0] : a:candidates
-  call unite#kinds#versions#yank(candidate.action__log.prev_revision)
+  call vital#versions#yank(candidate.action__log.prev_revision)
 endfunction
 
 let s:kind.action_table.diff = {

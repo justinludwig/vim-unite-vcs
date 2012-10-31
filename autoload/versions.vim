@@ -31,6 +31,13 @@ function! versions#is_type(type, path)
   return a:type == versions#get_type(a:path)
 endfunction
 
+function! versions#get_relative_path(path)
+  if fnamemodify(getcwd(), ':p') != fnamemodify(a:path, ':p')
+    return './' . fnamemodify(a:path, ':.')
+  endif
+  return './'
+endfunction
+
 function! versions#get_root_dir(path)
   let type = versions#get_type(a:path)
   if !exists('s:type_dir_map[type]')

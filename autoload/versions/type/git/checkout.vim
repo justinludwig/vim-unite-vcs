@@ -5,7 +5,7 @@ function! versions#type#git#checkout#do(args)
   let args = a:args
   if has_key(args, 'paths') && vital#versions#is_list(args.paths)
     call map(args.paths, 'vital#versions#substitute_path_separator(v:val)')
-    call map(args.paths, 'vital#versions#get_relative_path(v:val)')
+    call map(args.paths, 'versions#get_relative_path(v:val)')
   else
     let args.paths = []
   endif

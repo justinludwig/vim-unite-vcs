@@ -17,7 +17,7 @@ function! versions#type#svn#log#do(args)
   let output = vital#versions#system(printf('svn log --incremental --limit %s %s %s',
         \ limit,
         \ stop_on_copy ? '--stop-on-copy' : '',
-        \ vital#versions#get_relative_path(path)))
+        \ versions#get_relative_path(path)))
 
   return versions#type#svn#log#parse(output)
 endfunction

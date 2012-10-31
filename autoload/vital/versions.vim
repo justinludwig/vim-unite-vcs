@@ -50,11 +50,11 @@ function! vital#versions#substitute_path_separator(...)
   return call(s:V.substitute_path_separator, a:000)
 endfunction
 
-function! vital#versions#get_relative_path(path)
-  if fnamemodify(getcwd(), ':p') != fnamemodify(a:path, ':p')
-    return './' . fnamemodify(a:path, ':.')
+function! vital#versions#yank(text)
+  let @" = a:text
+  if has('clipboard')
+    let @* = @"
   endif
-  return './'
 endfunction
 
 function! vital#versions#system(...)
@@ -72,7 +72,8 @@ function! vital#versions#execute(...)
 endfunction
 
 function! vital#versions#echomsgs(messages)
-  for message in split(a:messages, "\n")
+  let messages = vital#versions#trim_cr(messages)
+  for message in split(messages, "\n")
     echomsg message
   endfor
 endfunction

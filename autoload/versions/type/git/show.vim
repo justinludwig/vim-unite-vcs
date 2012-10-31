@@ -5,7 +5,7 @@ function! versions#type#git#show#do(args)
   if !has_key(a:args, 'path')
     throw 'versions#type#git#show: invalid argument "path".'
   endif
-  let path = vital#versions#get_relative_path(a:args.path)
+  let path = versions#get_relative_path(a:args.path)
   let revision = get(a:args, 'revision', 'HEAD')
 
   let output = vital#versions#system(printf('git show %s',

@@ -12,7 +12,7 @@ function! versions#type#git#reset#do(args)
   let hard = get(args, 'hard', 0)
 
   call map(args.paths, 'vital#versions#substitute_path_separator(v:val)')
-  call map(args.paths, 'vital#versions#get_relative_path(v:val)')
+  call map(args.paths, 'versions#get_relative_path(v:val)')
 
   let output = vital#versions#system(printf('git reset %s -- %s',
         \ soft ? '--soft' : (hard ? '--hard' : ''),

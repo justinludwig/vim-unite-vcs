@@ -6,7 +6,7 @@ function! versions#type#git#status#do(args)
         \ get(a:args, 'path', './'))
 
   let output = vital#versions#system(printf('git status --short %s',
-        \ vital#versions#get_relative_path(path)))
+        \ versions#get_relative_path(path)))
   return versions#type#git#status#parse(output)
 endfunction
 

@@ -14,7 +14,7 @@ function! versions#type#git#log#do(args)
   let output = vital#versions#system(printf('git log --pretty=format:"%s" %s %s',
         \ g:versions#type#git#log#format,
         \ limit,
-        \ vital#versions#get_relative_path(path)))
+        \ versions#get_relative_path(path)))
 
   return versions#type#git#log#parse(output)
 endfunction

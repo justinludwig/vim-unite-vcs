@@ -9,7 +9,7 @@ function! versions#type#git#add#do(args)
   endif
 
   call map(args.paths, 'vital#versions#substitute_path_separator(v:val)')
-  call map(args.paths, 'vital#versions#get_relative_path(v:val)')
+  call map(args.paths, 'versions#get_relative_path(v:val)')
 
   let output = vital#versions#system(printf('git add -- %s',
         \ join(args.paths, ' ')))
