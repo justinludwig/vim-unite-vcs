@@ -1,9 +1,9 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-let g:versions#type#git#commit#filepath = '.git'
-let g:versions#type#git#commit#filename = 'COMMIT_EDITMSG'
-let g:versions#type#git#commit#filetype = 'gitcommit'
+call vital#versions#define(g:, 'versions#type#git#commit#filepath', '.git')
+call vital#versions#define(g:, 'versions#type#git#commit#filename', 'COMMIT_EDITMSG')
+call vital#versions#define(g:, 'versions#type#git#commit#filetype', 'gitcommit')
 
 let s:paths = []
 

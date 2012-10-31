@@ -1,9 +1,10 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-let g:versions#type#svn#commit#filename = 'svn-commit.tmp'
-let g:versions#type#svn#commit#editorcmd = 'vim'
-let g:versions#type#svn#commit#ignore = '--This line, and those below, will be ignored--'
+call vital#versions#define(g:, 'versions#type#svn#commit#filename', 'svn-commit.tmp')
+call vital#versions#define(g:, 'versions#type#svn#commit#editorcmd', 'vim')
+call vital#versions#define(g:, 'versions#type#svn#commit#ignore',
+      \ '--This line, and those below, will be ignored--')
 
 let s:paths = []
 
