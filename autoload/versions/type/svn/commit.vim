@@ -6,23 +6,8 @@ call vital#versions#define(g:, 'versions#type#svn#commit#editorcmd', 'vim')
 call vital#versions#define(g:, 'versions#type#svn#commit#ignore',
       \ '--This line, and those below, will be ignored--')
 
-let s:paths = []
-
 function! versions#type#svn#commit#do(args)
-  if filereadable(s:get_file(getcwd()))
-    call delete(s:get_file(getcwd()))
-  endif
-
-  " TODO: haa...
-  call system(printf('svn commit --editor-cmd=%s %s',
-        \ g:versions#type#svn#commit#editorcmd,
-        \ join(
-        \   map(deepcopy(a:args.paths),
-        \     'vital#versions#substitute_path_separator(v:val)'
-        \   ),
-        \   ' '
-        \ )))
-
+  call versions#type#svn#commit#create_message(a:args.paths)
   call vital#versions#execute('tabedit', s:get_file(getcwd()))
 
   let b:versions = {
@@ -65,6 +50,19 @@ function! versions#type#svn#commit#finish()
         \ b:versions.context.working_dir)
 endfunction
 
+function! versions#type#svn#commit#create_message(paths)
+  let statuses = versions#command('status', {
+        \   'paths': a:paths
+        \ }, {
+        \   'working_dir': getcwd(),
+        \ })
+  call writefile(['', g:versions#type#svn#commit#ignore, ''] + map(filter(statuses,
+        \   "index(a:paths, v:val.path) > -1"),
+        \   "substitute(v:val.line, '\n', '', 'g')"
+        \ ),
+        \ s:get_file(getcwd()))
+endfunction
+
 function! s:commit(args)
   let output = vital#versions#system(printf('svn commit -F %s %s',
         \ s:get_file(getcwd()),
@@ -80,7 +78,7 @@ endfunction
 
 function! s:get_file(dir)
   return printf('%s/%s',
-        \   versions#get_root_dir(a:dir),
+        \   vital#versions#trim_right(a:dir, '/'),
         \   g:versions#type#svn#commit#filename
         \ )
 endfunction
