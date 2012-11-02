@@ -5,6 +5,14 @@ function! unite#sources#versions#git#log#define()
   return [s:source]
 endfunction
 
+function! unite#sources#versions#git#log#check(type, args)
+  try
+    return versions#get_type(unite#sources#versions#get_path(get(a:args, 0, '%'))) == a:type
+  catch
+    return 0
+  endtry
+endfunction
+
 let s:source = {
       \ 'name': 'versions/git/log',
       \ 'description': 'vcs repository log.',
@@ -15,16 +23,15 @@ function! s:source.hooks.on_init(args, context)
   let a:context.source__args = {}
   let a:context.source__args.path = unite#sources#versions#get_path(get(a:args, 0, '%'))
   let a:context.source__args.limit = get(a:args, 1, '')
+
+  if versions#get_type(a:context.source__args.path) != 'git'
+    throw '[versions] vcs not detected.'
+  endif
 endfunction
 
 function! s:source.gather_candidates(args, context)
   let path = a:context.source__args.path
   let limit = a:context.source__args.limit
-
-  if versions#get_type(path) == ''
-    call unite#print_message('[versions] vcs not detected.')
-    return []
-  endif
 
   call unite#print_message('[versions/log] type: ' . versions#get_type(path))
   call unite#print_message('[versions/log] path: ' . path)
