@@ -41,10 +41,15 @@ endfunction
 let s:kind.action_table.diff = {
       \ 'description': 'display diff.',
       \ 'is_selectable': 0,
-      \ 'is_quit': 0
       \ }
 function! s:kind.action_table.diff.func(candidates)
   let candidate = vital#versions#is_list(a:candidates) ? a:candidates[0] : a:candidates
+  call versions#call('unite#kinds#versions#svn#log#diff',
+        \ [candidate],
+        \ fnamemodify(candidate.source__args.path, ':p:h'))
+endfunction
+function! unite#kinds#versions#svn#log#diff(candidate)
+  let candidate = a:candidate
 
   if !filereadable(candidate.source__args.path)
     return unite#start_temporary([['versions/svn/changeset',
@@ -66,10 +71,15 @@ endfunction
 let s:kind.action_table.diff_prev = {
       \ 'description': 'display previous revision diff.',
       \ 'is_selectable': 0,
-      \ 'is_quit': 0
       \ }
 function! s:kind.action_table.diff_prev.func(candidates)
   let candidate = vital#versions#is_list(a:candidates) ? a:candidates[0] : a:candidates
+  call versions#call('unite#kinds#versions#svn#log#diff_prev',
+        \ [candidate],
+        \ fnamemodify(candidate.source__args.path, ':p:h'))
+endfunction
+function! unite#kinds#versions#svn#log#diff_prev(candidate)
+  let candidate = a:candidate
 
   if !filereadable(candidate.source__args.path)
     return unite#start_temporary([['versions/svn/changeset',

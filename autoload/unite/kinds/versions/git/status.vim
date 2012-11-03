@@ -38,7 +38,6 @@ let s:kind.action_table.commit = {
       \ 'description': 'commit status.',
       \ 'is_selectable': 1,
       \ 'is_invalidate_cache': 1,
-      \ 'is_quit': 0,
       \ }
 function! s:kind.action_table.commit.func(candidates)
   let candidates = vital#versions#is_list(a:candidates) ? a:candidates : [a:candidates]

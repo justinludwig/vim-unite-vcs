@@ -21,7 +21,7 @@ function! versions#type#git#changeset#parse(output)
     return {}
   endif
 
-  let changeset[0].statuses = map(filter(list,
+  let changeset[0].statuses = map(filter(list[1:],
         \ 'versions#type#git#changeset#is_status_line(v:val)'),
         \ 'versions#type#git#changeset#create_status(v:val)')
   return changeset[0]

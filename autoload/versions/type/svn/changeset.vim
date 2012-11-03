@@ -28,7 +28,10 @@ endfunction
 function! versions#type#svn#changeset#extract_changeset(list)
   let [log1, statuses1] = s:extract_changeset(a:list[0])
   let [log2, statuses2] = s:extract_changeset(a:list[1])
-  let logs = versions#type#svn#log#parse(join(log1 + log2, g:versions#type#svn#log#separator . "\n"))
+  let logs = versions#type#svn#log#parse(printf("%s\n%s\n%s",
+        \ join(log1, "\n"),
+        \ g:versions#type#svn#log#separator,
+        \ join(log2, "\n")))
   if empty(logs)
     return {}
   endif
@@ -50,10 +53,12 @@ function! versions#type#svn#changeset#create_status(line)
         \ }
 endfunction
 
-
 function! s:extract_changeset(log)
   let log = split(a:log, "\n")
-  let statuses = remove(log, 2, index(log, '') - 1)
+  let statuses = remove(log, 1, index(log, '') - 1)
+  if !empty(statuses)
+    let statuses = statuses[1:]
+  endif
   return [log, statuses]
 endfunction
 

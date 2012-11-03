@@ -4,8 +4,8 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 let output = [
-      \ '*	d5558fde37c50a2976a6253bb7eb9907e2603b89	09717b84fd1f756b2c2e58eb5e2298f14fc71a03	hrsh7th	hrsh7th@gmail.com	2012-10-13 03:43:22 +0900	add svn log command and tests.',
-      \ '*	09717b84fd1f756b2c2e58eb5e2298f14fc71a03	2df4a8083588853283f30186210c54d4d772cbb8	hrsh7th	hrsh7th@gmail.com	2012-10-13 01:23:07 +0900	added status command and tests.',
+      \ 'd5558fde37c50a2976a6253bb7eb9907e2603b89	09717b84fd1f756b2c2e58eb5e2298f14fc71a03	hrsh7th	hrsh7th@gmail.com	2012-10-13 03:43:22 +0900	add svn log command and tests.',
+      \ '09717b84fd1f756b2c2e58eb5e2298f14fc71a03	2df4a8083588853283f30186210c54d4d772cbb8	hrsh7th	hrsh7th@gmail.com	2012-10-13 01:23:07 +0900	added status command and tests.',
       \ ]
 
 Context Source.run()

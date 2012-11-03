@@ -23,7 +23,7 @@ function! s:source.hooks.on_init(args, context)
   let a:context.source__args = {}
   let a:context.source__args.path = unite#sources#versions#get_path(get(a:args, 0, '%'))
 
-  if versions#get_type(let a:context.source__args.path) != 'svn'
+  if versions#get_type(a:context.source__args.path) != 'svn'
     throw '[versions] vcs not detected.'
   endif
 endfunction

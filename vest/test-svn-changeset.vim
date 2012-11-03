@@ -23,8 +23,10 @@ Context Source.run()
 
   It 'parse output'
     let result = versions#type#svn#changeset#parse(join(output, "\n"))
+    let message = join(['test commit.', ''], "\n")
     Should !empty(result)
     Should len(result.statuses) == 1
+    Should result.message == message
     Should result.statuses[0].status == '   M'
     Should result.statuses[0].path == '/README.mkd'
     Should result.statuses[0].line == '   M /README.mkd'
@@ -36,5 +38,4 @@ Fin
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
-
 
