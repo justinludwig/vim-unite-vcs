@@ -45,6 +45,12 @@ let s:kind.action_table.diff = {
       \ }
 function! s:kind.action_table.diff.func(candidates)
   let candidate = vital#versions#is_list(a:candidates) ? a:candidates[0] : a:candidates
+  call versions#call('unite#kinds#versions#git#log#diff',
+        \ [candidate],
+        \ fnamemodify(candidate.source__args.path, ':p:h'))
+endfunction
+function! unite#kinds#versions#git#log#diff(candidate)
+  let candidate = a:candidate
 
   if !filereadable(candidate.source__args.path)
     return unite#start_temporary([['versions/git/changeset',
@@ -70,6 +76,12 @@ let s:kind.action_table.diff_prev = {
       \ }
 function! s:kind.action_table.diff_prev.func(candidates)
   let candidate = vital#versions#is_list(a:candidates) ? a:candidates[0] : a:candidates
+  call versions#call('unite#kinds#versions#git#log#diff_prev',
+        \ [candidate],
+        \ fnamemodify(candidate.source__args.path, ':p:h'))
+endfunction
+function! unite#kinds#versions#git#log#diff_prev(candidate)
+  let candidate = a:candidate
 
   if !filereadable(candidate.source__args.path)
     return unite#start_temporary([['versions/git/changeset',

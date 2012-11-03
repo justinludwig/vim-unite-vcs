@@ -78,7 +78,7 @@ function! versions#command(command, command_args, global_args)
         \ versions#get_type(working_dir), a:command)
   return versions#call(
         \   function(function_name),
-        \   vital#versions#is_dict(a:command_args) ? filter(a:command_args, "!vital#versions#is_empty(v:val)") : {},
+        \   [vital#versions#is_dict(a:command_args) ? filter(a:command_args, "!vital#versions#is_empty(v:val)") : {}],
         \   working_dir
         \ )
 endfunction
@@ -87,7 +87,7 @@ function! versions#call(function, args, working_dir)
   let current_dir = getcwd()
   call vital#versions#execute('lcd', a:working_dir)
   try
-    let result = a:function(a:args)
+    let result = call(a:function, a:args)
   finally
     call vital#versions#execute('lcd', current_dir)
   endtry

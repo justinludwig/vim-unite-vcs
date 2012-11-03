@@ -17,7 +17,12 @@ let s:kind.action_table.diff = {
       \ }
 function! s:kind.action_table.diff.func(candidates)
   let candidates = vital#versions#is_list(a:candidates) ? a:candidates : [a:candidates]
-  for candidate in candidates
+  call versions#call('unite#kinds#versions#git#status#diff',
+        \ [candidates],
+        \ fnamemodify(candidates[0].source__args.path, ':p:h'))
+endfunction
+function! unite#kinds#versions#git#status#diff(candidates)
+  for candidate in a:candidates
     call versions#diff#file_with_string(candidate.action__status.path, {
           \   'name': printf('[REMOTE] %s',  candidate.action__status.path),
           \   'string': versions#command('show', {

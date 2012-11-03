@@ -46,7 +46,7 @@ function! versions#type#svn#commit#finish()
   endif
 
   call versions#call(function(printf('<SNR>%d_commit', s:SID())),
-        \ b:versions.context.args,
+        \ [b:versions.context.args],
         \ b:versions.context.working_dir)
 endfunction
 
