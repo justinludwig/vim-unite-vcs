@@ -30,7 +30,7 @@ function! s:unite_versions(args)
     endif
   endfor
 
-  throw 'invalid arguments.'
+  echomsg 'vcs not detected.'
 endfunction
 
 let &cpo = s:save_cpo
