@@ -73,7 +73,7 @@ endfunction
 
 function! vital#versions#echomsgs(messages)
   let messages = vital#versions#trim_cr(a:messages)
-  for message in [''] + split(messages, "\n")
+  for message in [' '] + split(messages, "\n")
     echomsg message
   endfor
 endfunction
