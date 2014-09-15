@@ -13,7 +13,7 @@ function! vcs#svn#commit#do(args)
 
   let s:files = type(a:args) == type([]) ? a:args : [a:args]
   call s:make_msgfile()
-  call vcs#execute(['tabedit', g:vcs#svn#commit_msgfile])
+  call vcs#execute(['edit', g:vcs#svn#commit_msgfile])
 
   augroup VimUniteVcsSvnCommit
     autocmd!

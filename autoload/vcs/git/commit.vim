@@ -13,7 +13,7 @@ function! vcs#git#commit#do(args)
 
   let s:files = type(a:args) == type([]) ? a:args : [a:args]
   call vcs#system(['git', 'commit', join(vcs#escape(s:files), ' ')], 1)
-  call vcs#execute(['tabedit', '.git/COMMIT_EDITMSG'])
+  call vcs#execute(['edit', '.git/COMMIT_EDITMSG'])
   call vcs#execute(['set', 'filetype=gitcommit'])
 
   augroup VimUniteVcsGitCommit

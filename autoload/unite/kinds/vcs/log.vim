@@ -49,11 +49,12 @@ endfunction
 let s:kind.action_table.diff = {
       \ 'description': 'display candidates diff, if source path is file.',
       \ 'is_selectable': 0,
-      \ 'is_quit': 0
+      \ 'is_quit': 1
       \ }
 function! s:kind.action_table.diff.func(candidates)
   let candidate = type(a:candidates) == type([]) ? a:candidates[0] : a:candidates
   if filereadable(candidate.source__path)
+    bd
     call vcs#diff_file_with_string(candidate.action__path, {
           \ 'name': '[REMOTE] ' . candidate.action__path,
           \ 'string': vcs#vcs('cat', [candidate.action__path, candidate.action__revision])
@@ -66,7 +67,7 @@ endfunction
 let s:kind.action_table.diff_prev = {
       \ 'description': 'display candidates diff previous log, if source path is file.',
       \ 'is_selectable': 0,
-      \ 'is_quit': 0
+      \ 'is_quit': 1
       \ }
 function! s:kind.action_table.diff_prev.func(candidates)
   let candidate = type(a:candidates) == type([]) ? a:candidates[0] : a:candidates

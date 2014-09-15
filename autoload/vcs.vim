@@ -86,7 +86,7 @@ function! vcs#trim_cr(string)
 endfunction
 
 function! vcs#diff_file_with_string(path, arg)
-  call vcs#execute(['tabedit', a:path])
+  call vcs#execute(['edit', a:path])
   diffthis
 
   vnew
@@ -97,7 +97,7 @@ function! vcs#diff_file_with_string(path, arg)
 endfunction
 
 function! vcs#diff_string_with_string(arg1, arg2)
-  tabnew
+  enew
   put!=a:arg1.string
   setlocal bufhidden=delete buftype=nofile nobuflisted noswapfile nomodifiable
   call vcs#execute(['file', a:arg1.name])
