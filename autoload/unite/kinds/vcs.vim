@@ -8,27 +8,11 @@ endfunction
 
 function! unite#kinds#vcs#get_kinds(target)
   let target = 'autoload/unite/kinds/' . a:target
-  let paths = []
-
-  " target path loop.
-  for path in split(globpath(&runtimepath, target . '/*.vim'))
-    let path = substitute(path, '\/\/', '/', 'g')
-
-    " rtp path loop.
-    for rtp in split(&runtimepath, ',')
-      let rtp = substitute(rtp, '\/\/', '/', 'g') . '/' . target
-
-      if path =~# rtp
-        let l1 = strlen(path)
-        let l2 = strlen(rtp)
-        call add(paths, strpart(path, l2 + 1, l1 - l2 - strlen('.vim') - 1))
-      endif
-    endfor
-  endfor
+  let names = map(split(globpath(&runtimepath, target . '/*.vim'), "\<NL>"), 'fnamemodify(v:val , ":t:r")')
 
   " collect kinds.
   let kinds = []
-  for kind in map(paths, "{'unite#kinds#' . substitute(a:target . '/' . v:val, '/', '#', 'g') . '#define'}()")
+  for kind in map(names, "{'unite#kinds#' . substitute(a:target . '/' . v:val, '/', '#', 'g') . '#define'}()")
     let kinds += kind
   endfor
   return kinds
